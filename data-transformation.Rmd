@@ -1,0 +1,440 @@
+---
+title: "Data Transformation"
+date: "Agosto 2019"
+output: 
+  html_document:
+    includes:
+      after_body: footer.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Agenda {.tabset .tabset-fade .tabset-pills}
+
++ Welcome!
++ Getting Started with R Programming
++ R_Basico_1.0
+
+&nbsp;
+
+### Welcome!
+
+`OBJETIVO:` **Presentación y breve panorama de lo que haremos las próximas semanas**
+
+&nbsp;
+
+Funcionamiento de nuestro cerebro.
+
+&nbsp;
+
+```{r echo=F, fig.cap="Clear your minds!!!", out.width = '50%'}
+knitr::include_graphics("Imagenes/memory.jpg")
+```
+
+&nbsp;
+
+Hay que ubicarnos en donde estamos en base a lo que hacemos actualmente. No todo lo que hacemos hoy esta mal, pero hay aún mas cosas que aprender. 
+
+&nbsp;
+
+```{r echo=F, fig.cap="Dónde estamos?", out.width = '60%'}
+knitr::include_graphics("Imagenes/chart1.png")
+```
+
+&nbsp;
+
+La generación e ingesta de datos hoy es una necesidad, debemos contar con mejores herramientas para el manejo de los mismos. Es muy util en nuestras vidas se consumidores, pero mucho mejor ser generadores y controladores de ellos. 
+
+&nbsp;
+
+```{r echo=F, fig.cap="Datos everywhere!", out.width = '60%'}
+knitr::include_graphics("Imagenes/dataUse.jpeg")
+```
+
+&nbsp;
+
+Debemos de empezar por algo, los diferentes lenguajes de programación y otras herramientas denominadas Open Source son un excelente comienzo!!
+
+&nbsp;
+
+```{r echo=F, fig.cap="Python y R para empezar", out.width = '60%'}
+knitr::include_graphics("Imagenes/poll1.jpeg")
+```
+
+&nbsp;
+
+Necesitamos ver el ecosistema, nuestra realidad y tomar la mejor decisión para ver por donde empezamos, todos los lenguajes son utiles, pero no podemos saberlo todo.
+
+&nbsp;
+
+```{r echo=F, fig.cap="Ecosistema de R", out.width = '60%'}
+knitr::include_graphics("Imagenes/RWorld.jpeg")
+```
+
+&nbsp;
+
+Para discutir la próxima sesión, revisen el articulo, al inicio de cada sesión comentaremos algo similar, ya sea dudas de ustedes ó buenos articulos que recomendaré.
+
+https://www.makeuseof.com/tag/how-programming-affects-brain/
+
+
+&nbsp;
+
+Dudas del Open Source, revisen el siguiente Link https://www.gnu.org/licenses/quick-guide-gplv3.html y naveguen.
+
+
+&nbsp;
+
+### Getting Started with R Programming
+
+`OBJETIVO:` **Breve historia de R y contexto**
+
+&nbsp;
+
+#### Historia de R
+
+&nbsp;
+
+Ross Ihaka and Robert Gentleman desarrollaron `R` como un software *free* cuando impartían clases en la Universidad de Auckland en New Zealand a principios de 1990. 
+
+Lo crearon a partir del lenguaje estadístico denominado `S` y para diferenciar su trabajo usaron una sintaxis similar para su propio uso. En 1993 anunciaron su colaboración en las noticias del mailing list de `S`, muchas personas se interesaron y se sumaron a la colaboración. Dicha colaboración sigue en pie en el sitio https://www.r-project.org/ 
+
+El lanzamiento oficial (1.0.0) fue en Febrero del 2000, para ese entonces ya era parte de la fundación de software libre GNU. Actualmente la última versión (3.6) está disponible desde Abril de este año para más de 30 países.
+
+&nbsp;
+
+#### Ventajas y usos de R
+
+&nbsp;
+
+Es un software que ayuda a la manipulación de datos, cálculos aritméticos y visualización de gráficos dinámicos. 
+
+El código es de fácil escritura y comprensión.
+
+Excelente para el cálculo de matrices, vectores, algoritmos complejos.
+
+Existe una colección muy amplia de herramientas para el análisis de datos, visualización y otros propósitos. `dplyr`, `data.table`,  `tidyr` y `ggplot2` algunos de ellos.
+
+Fácil desarrollo de herramientas con buen nivel de interacción como `blogdown` y `xaringan`.
+
+&nbsp;
+
+#### Iniciando
+
+&nbsp;
+
+Para descargar e instalar `R` en su última versión, deberán utilizar el siguiente link https://cran.r-project.org/bin/windows/base/  donde encontraran la versión para Windows que es el sistema operativo que todos tenemos.
+
+Un lenguaje amigable, fácil de usar y entender, simple y efectivo.
+
+Con `R` se distribuyen algunos paquetes, pero existen muchos más en el sitio CRAN, cubriendo así un amplio espectro de herramientas estadísticas, de cálculo y de visualización que les harán más divertida la vida.
+
+El link con todo el material del curso esta en mi repo personal de Git, tengan cuidado de no aruinarlo, luego hacemos otro curso de Git. https://github.com/ricardolastra/Workshop_Seguros
+
+En los próximos días les hare llegar documentos como estos, los cuales les serán de gran apoyo con cosas básicas, no podemos retener todo en mente, además que no cubriremos muchos comandos, ejemplos y funciones de las paqueterías.
+
+
+&nbsp;
+
+```{r echo=F, out.width = '50%'}
+knitr::include_graphics("Imagenes/cheatsheet.jpeg")
+```
+
+&nbsp;
+
+Para las siguientes sesiones usaremos una interface muy "Fancy" denominada RStudio, la cual podrán descargar en el siguiente link https://www.rstudio.com/products/rstudio/download/ que los llevara a tener la versión más reciente 1.2.1335
+
+Existen más programas o UI´s muy padres, Anaconda (luego revisan el siguiente link) https://www.anaconda.com/distribution/ tiene excelentes herramientas con Python y aun para R. Sin embargo una de las mejores herramientas con R es RStudio. 
+
+No nos perdemos de mucho, échenle un ojo.
+
+&nbsp;
+
+```{r echo=F, out.width = '60%'}
+knitr::include_graphics("Imagenes/heatmap.jpg")
+```
+
+&nbsp;
+
+##### *Están listos?*
+
+
+### R_Basico_1.0
+
+`OBJETIVO:` **Vistazo de Rstudio y primeros comandos**
+
+&nbsp;
+
+Recordando...
+
+*R es un lenguaje computacional diseñado para la estadística.* 
+
+* Es gratis
+* Amplias librerias
+* Basto soporte, mailing list, blogs, tutoriales
+* De facíl desarrollo
+* Desarrolado por estadísticos
+
+&nbsp;
+
+Recuerden que cualquier cosa que escriban en R muy probablemente no seran los primeros en intentarlo, hay una gran posibilidad que alguien ya haya escrito  algun paquete justo para lo que necesitan.
+
+Hecharemos un vistazo a la parte basica de RStudio que nos permitira entender el funcionamiento del lenguaje, sus alcances, sus aplicaciones y sus ventajas sobre las herramientas actuales que conocemos.
+
+&nbsp;
+
+```{r echo=F, out.width = '70%'}
+knitr::include_graphics("Imagenes/rstudio.jpg")
+```
+
+&nbsp;
+
+Inicien RStudio y abran un R script:
+
+* En Windows click en el boton de Inicio y busquen Rstudio.
+* Ya en Rstudio den click en  `File -> New File -> R script` 
+* Guardenlo en su carpeta del curso  `File -> Save As -> ruta a su carpeta y nombre del file`
+
+Ahora traten de reproducir las siguientes notas.
+
+Nota. Recuerden el simbolo `#` para comentar su codigo. 
+  
+&nbsp;
+
+**FORMAS DE DECLARAR Ó GUARDAR Ó ALMACENAR Ó MANTENER VARIABLES:**
+```{r }
+x = 3
+y <- 4
+5 -> z
+```
+
+**Asi estan almacenadas en el ambiente:**
+
+```{r }
+x
+y
+z
+```
+
+Nota. Los valores que guardamos pueden ser usados en subsecuentes operaciones, recuerden que lo mas limpio es poner el nombre a la izquierda y los valores a la derecha.
+
+&nbsp;
+
+**SOBRESCRIBIR VARIABLES:**
+```{r }
+x = 4
+y <- 5
+6 -> z
+```
+
+**Asi estan almacenadas en el ambiente:**
+
+```{r }
+x
+y
+z
+```
+
+**CALCULOS BASICOS:**
+
+Operadores
+```{r ,warning=F, error=F, message=F}
+#SUMAS
+25+25
+x+y
+#MULTIPLICACIONES
+35*2
+#DIVISIONES
+x/y
+#RESTAS
+z-x-y
+#Potencias
+3^2
+y^x
+```
+
+**CALCULOS BASICOS**
+
+FORMAS DE **NO** HACER CALCULOS BASICOS, ASI NO ES LA SINTAXIS DE R:
+```{r ,warning=F, error=F, message=F}
+#SUMAS
+#=25+25
+
+#MULTIPLICACIONES
+#(35)(2)
+```
+
+**VECTORES**
+
+```{r }
+#Basicos
+x <- c(1,4,3,1,3,2,2,2)
+x[1]
+x[2]
+x[2:4]
+x[-1]
+x[-4]
+x[x<=3]
+#Función which (más adelante veremos, for, while, ifelse)
+#Devuelve la posición del elemento que pidamos validar.
+which(x==1)
+#Quizá con el alfabeto es más claro.
+which(letters == "g")
+x==1
+#Mas complejos con operaciones, guardamos vectores
+Cebollas.huacal <- c(12,4,4,6,9,3)
+Chiles.caja <- c(5,3,2,2,12,9)
+#Multiplicamos vectores
+Cebollas.precio <- Cebollas.huacal *200
+Chiles.precio <- Chiles.caja *100
+#Sumamos vectores
+Cebollas.precio + Chiles.precio
+#Tambien lo podemos hacer asi en 1 sola linea
+Cebollas.huacal *200 + Chiles.caja *100
+```
+
+**OBJETOS**
+
+```{r }
+objeto <- 3*3
+```
+
+**FUNCIONES**
+```{r }
+myfun = function(x, y){
+  return (x*y)
+}
+myfun(3,4)
+
+myfun2 = function(x, n=2){
+  return(x^n)
+}
+myfun2(4)
+myfun2(2, n=3)
+```
+
+**R LOOP´S**
+
+Sintaxis *WHILE*:
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+while (test_expression){
+  statement
+  }
+
+</div>
+
+&nbsp;
+
+```{r }
+i <- 1
+while (i < 6) {
+  print(i)
+  i = i+1
+  }
+```
+&nbsp;
+
+Sintaxis *FOR*:
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+for(var in seq){
+  expr
+  }
+
+</div>
+
+&nbsp;
+
+
+```{r }
+for (año in c(2014,2015,2016,2017,2018,2019)){
+  print(paste("El año actual es", año))
+}
+```
+&nbsp;
+
+Aún mejor...
+
+```{r }
+for (año in 2014:2019){
+  print(paste("El año actual es", año))
+}
+```
+&nbsp;
+
+lo ideal...
+
+```{r }
+años <- c(2014,2015,2016,2017,2018,2019)
+for (i in años){
+  print(paste("El año actual es", i))
+}
+```
+&nbsp;
+
+**R FUNCTION´S**
+
+
+Sintaxis *IFELSE*:
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+ifelse(test, yes, no)
+
+</div>
+
+&nbsp;
+
+
+```{r }
+plazo <- c(6,9,12,24,30)
+ifelse(plazo==9, "aplica" , "no aplica")
+```
+&nbsp;
+
+más divertido...
+
+```{r }
+plazo <- c(6,9,12,24,30)
+ifelse(plazo>=9 & plazo<=24, "aplica" , "no aplica")
+```
+&nbsp;
+
+Sintaxis *WHICH*:
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+which(x, arr.ind = FALSE, useNames = TRUE)
+
+</div>
+
+&nbsp;
+
+
+```{r }
+
+which(letters == "g")
+
+```
+&nbsp;
+
+Nota. Para más detalles consulten los documentos de apoyo del repo de git en el documento `refcard_2.0_operators_others`
+
+&nbsp;

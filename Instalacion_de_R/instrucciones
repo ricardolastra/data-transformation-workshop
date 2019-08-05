@@ -1,0 +1,16 @@
+Para instalar R en su Compu
+1. Abrir el Chrome
+2. Teclear en GOOGLE  "R download"
+3. Abrir enlace de: https://cran.r-project.org/bin/windows/base/
+4. Click en  "Download R 3.6.0 for Windows" , se empieza a descargar.
+5. Dar click en el archivo descargado terminacion .exe
+6. Seguir proceso de instalacion abajo mencionado
+
+Para instalar RStudio, la UI Fancy de R
+1. Abrir el Chrome
+2. Teclear en GOOGLE  "RStudio download"
+3. Abrir el enlace de: https://www.rstudio.com/products/rstudio/download/
+4. Dar click en descargar "RStudio Desktop Open Source License"
+5. Seleccionar plataforma o sistema operativo de su LAP, en la mayoria sera "RStudio 1.2.1335 - Windows 7+ (64-bit)"
+6. Dar click en el archivo descargado terminacion .exe
+7. Seguir proceso de instalacion abajo mencionado
