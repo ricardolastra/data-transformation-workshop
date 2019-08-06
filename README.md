@@ -5,11 +5,17 @@ Workshop de R, 8 sesiones de aprendizaje desde cero de R para no programadores c
 ## Notas
 *Las notas de cada sesión las pueden encontrar [aquí.](data-transformation.Rmd)
 
-## Otros
+## Documentos de Apoyo
+
+## Bases
+
+##Ejercicios
+
 
 > Science is to understand your way...
 
 > Agradecimiento a harvard.edu, CRAN, ITAM, Github y la comunidad Open Source
+
 
 “(...) es vital reunirse con las personas con las que trabajamos (...). Esto nos ayuda a ser mucho mejores jefes y más líderes. Es la oportunidad para fortalecer el vínculo con los colaboradores y ayudarlos de una manera genuina a su desarrollo”.
 
