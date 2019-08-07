@@ -385,6 +385,7 @@ $(document).ready(function () {
 <li>Welcome!</li>
 <li>Getting Started with R Programming</li>
 <li>R_Basico_1.0</li>
+<li>R_Basico_1.1</li>
 </ul>
 <p> </p>
 <div id="welcome" class="section level3">
@@ -617,7 +618,7 @@ myfun2(4)</code></pre>
 <pre><code>## [1] 16</code></pre>
 <pre class="r"><code>myfun2(2, n=3)</code></pre>
 <pre><code>## [1] 8</code></pre>
-<p><strong>R LOOP´S</strong></p>
+<p><strong>R LOOP´S q</strong> While y For</p>
 <p>Sintaxis <em>WHILE</em>:</p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
@@ -678,7 +679,7 @@ for (i in años){
 ## [1] &quot;El año actual es 2018&quot;
 ## [1] &quot;El año actual es 2019&quot;</code></pre>
 <p> </p>
-<p><strong>R FUNCTION´S</strong></p>
+<p><strong>R FUNCTION´S</strong> Ifelse y Which</p>
 <p>Sintaxis <em>IFELSE</em>:</p>
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
@@ -708,6 +709,305 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 <pre><code>## [1] 7</code></pre>
 <p> </p>
 <p>Nota. Para más detalles consulten los documentos de apoyo del repo de git en el documento <code>refcard_2.0_operators_others</code></p>
+<p> </p>
+</div>
+<div id="r_basico_1.1" class="section level3">
+<h3>R_Basico_1.1</h3>
+<p><code>OBJETIVO:</code> <strong>Como cargar datos, paquetes y librerias</strong></p>
+<p> </p>
+<p>Cargando nuestros datos</p>
+<p>R tiene algunas formas de leer archivos, los mas comunes son tablas, archivos planos, archivos con alguna codificacion especifica o estructurada. Aunque no sera el objetivo del curso, leer cadenas de texto, datos sin estructuras definidas o espcificas y archivos sin algun tipo de orden, es algo que tambien se puede hacer en R.</p>
+<p>Para leer datos de un archivo, primero deben saber que tipo de archivo es, es decir, su extension. La tabla de abajo muestra una lista de funciones que pueden ser importadas segun el formato del archivo.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">tipo de datos</th>
+<th align="center">funcion</th>
+<th align="right">paquete</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">comma separated (.csv)</td>
+<td align="center"><code>read_csv()</code></td>
+<td align="right">readr</td>
+</tr>
+<tr class="even">
+<td align="left">other delimited formats</td>
+<td align="center"><code>read_delim()</code></td>
+<td align="right">readr</td>
+</tr>
+<tr class="odd">
+<td align="left">R (.Rds)</td>
+<td align="center"><code>read_rds()</code></td>
+<td align="right">readr</td>
+</tr>
+<tr class="even">
+<td align="left">Stata (.dta)</td>
+<td align="center"><code>read_dta()</code></td>
+<td align="right">haven</td>
+</tr>
+<tr class="odd">
+<td align="left">SPSS (.sav)</td>
+<td align="center"><code>read_spss()</code></td>
+<td align="right">haven</td>
+</tr>
+<tr class="even">
+<td align="left">SAS (.sas7bdat)</td>
+<td align="center"><code>read_sas()</code></td>
+<td align="right">haven</td>
+</tr>
+<tr class="odd">
+<td align="left">Excel (.xls, .xlsx)</td>
+<td align="center"><code>read_excel()</code></td>
+<td align="right">readxl</td>
+</tr>
+<tr class="even">
+<td align="left">regular delimited files</td>
+<td align="center"><code>fread()</code></td>
+<td align="right">data.table</td>
+</tr>
+</tbody>
+</table>
+<p>Nota. Mas información ver documento de apoyo <code>data-import</code></p>
+<p> </p>
+<p>Paqueterias de R ó los famosos <em>packages</em></p>
+<p>Los paquetes de R pueden ser instalados desde el famoso CRAN, el cual es una red de archivos de alta gama. Para ello deberán usar la función <code>install.packages</code>. Cuando instalan un paquete ponen una copia en la computadora de forma local, pero aun no lo hace “usable”, solo esta “disponible”. Para usarlo deberan adjuntar o cargar la funcion de <code>library</code>.</p>
+<p>Gracias a nuestro amigo Hadley y otros colaboradores, en este curso usaremos para prueba de carga el famoso “the tidyverse”. <code>Tidyverse</code> nos brinda grandes herramientas para manipulación basica y avanzada de datos, es muy funcional, facíl e intuitiva.</p>
+<p> </p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages ------------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 3.1.1       v purrr   0.3.2  
+## v tibble  2.1.1       v dplyr   0.8.0.1
+## v tidyr   0.8.3       v stringr 1.4.0  
+## v readr   1.3.1       v forcats 0.4.0</code></pre>
+<pre><code>## -- Conflicts ---------------------------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<p> </p>
+<p>Nota. Ayuda en R</p>
+<p>Podemos usar la función <code>help</code> o el operador al inicio de cada sentencia <code>?</code>.</p>
+<pre class="r"><code>#help(help)
+#?str</code></pre>
+<p> </p>
+<p>Cargando nuestro primer archivo:</p>
+<pre class="r"><code>read_csv(&quot;bases/PRIMAS_EJE_CARGA.csv&quot;)</code></pre>
+<pre><code>## Warning: Missing column names filled in: &#39;X2&#39; [2], &#39;X3&#39; [3], &#39;X4&#39; [4],
+## &#39;X5&#39; [5], &#39;X6&#39; [6], &#39;X7&#39; [7], &#39;X8&#39; [8], &#39;X9&#39; [9], &#39;X10&#39; [10], &#39;X11&#39; [11],
+## &#39;X12&#39; [12]</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `TITULOS FEOS DE REPORTES CLASICOS DE SIISA` = col_character(),
+##   X2 = col_character(),
+##   X3 = col_character(),
+##   X4 = col_character(),
+##   X5 = col_character(),
+##   X6 = col_character(),
+##   X7 = col_character(),
+##   X8 = col_character(),
+##   X9 = col_character(),
+##   X10 = col_character(),
+##   X11 = col_character(),
+##   X12 = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 23,347 x 12
+##    `TITULOS FEOS D~ X2    X3    X4    X5    X6    X7    X8    X9    X10  
+##    &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 &lt;NA&gt;             &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; 
+##  2 POLIZA           ENDO~ ID_C~ PRIMA PATE~ MATE~ NOMB~ NOMB~ SEXO  PLAZO
+##  3 D00- 201901      1     1     2097~ MURR~ GAREY LETI~ &lt;NA&gt;  F     15   
+##  4 D00- 201901      2     2     3202~ MEZA  MEZA  OMAR  &lt;NA&gt;  M     15   
+##  5 D00- 201901      1     3     6028~ LOPEZ ARAG~ AARON FEDE~ M     21   
+##  6 D00- 201901      2     4     8425~ CARD~ GUEV~ AARON IVAN  M     21   
+##  7 D00- 201901      1     5     2842~ JAVI~ MARQ~ AARON ALEJ~ M     27   
+##  8 D00- 201901      2     6     1593~ CAST~ RANG~ AARON &lt;NA&gt;  M     9    
+##  9 D00- 201901      1     7     1403~ GUER~ RODR~ AARON &lt;NA&gt;  M     15   
+## 10 D00- 201901      2     8     3766~ BENC~ RUBIO AARON MART~ M     9    
+## # ... with 23,337 more rows, and 2 more variables: X11 &lt;chr&gt;, X12 &lt;chr&gt;</code></pre>
+<p>UPS!! Problemas!!!</p>
+<p> </p>
+<p>Hagamos que este disponible la libreria…</p>
+<pre class="r"><code>library(readr)
+read_csv(&quot;bases/PRIMAS_EJE_CARGA.csv&quot;)</code></pre>
+<pre><code>## Warning: Missing column names filled in: &#39;X2&#39; [2], &#39;X3&#39; [3], &#39;X4&#39; [4],
+## &#39;X5&#39; [5], &#39;X6&#39; [6], &#39;X7&#39; [7], &#39;X8&#39; [8], &#39;X9&#39; [9], &#39;X10&#39; [10], &#39;X11&#39; [11],
+## &#39;X12&#39; [12]</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   `TITULOS FEOS DE REPORTES CLASICOS DE SIISA` = col_character(),
+##   X2 = col_character(),
+##   X3 = col_character(),
+##   X4 = col_character(),
+##   X5 = col_character(),
+##   X6 = col_character(),
+##   X7 = col_character(),
+##   X8 = col_character(),
+##   X9 = col_character(),
+##   X10 = col_character(),
+##   X11 = col_character(),
+##   X12 = col_character()
+## )</code></pre>
+<pre><code>## # A tibble: 23,347 x 12
+##    `TITULOS FEOS D~ X2    X3    X4    X5    X6    X7    X8    X9    X10  
+##    &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 &lt;NA&gt;             &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; 
+##  2 POLIZA           ENDO~ ID_C~ PRIMA PATE~ MATE~ NOMB~ NOMB~ SEXO  PLAZO
+##  3 D00- 201901      1     1     2097~ MURR~ GAREY LETI~ &lt;NA&gt;  F     15   
+##  4 D00- 201901      2     2     3202~ MEZA  MEZA  OMAR  &lt;NA&gt;  M     15   
+##  5 D00- 201901      1     3     6028~ LOPEZ ARAG~ AARON FEDE~ M     21   
+##  6 D00- 201901      2     4     8425~ CARD~ GUEV~ AARON IVAN  M     21   
+##  7 D00- 201901      1     5     2842~ JAVI~ MARQ~ AARON ALEJ~ M     27   
+##  8 D00- 201901      2     6     1593~ CAST~ RANG~ AARON &lt;NA&gt;  M     9    
+##  9 D00- 201901      1     7     1403~ GUER~ RODR~ AARON &lt;NA&gt;  M     15   
+## 10 D00- 201901      2     8     3766~ BENC~ RUBIO AARON MART~ M     9    
+## # ... with 23,337 more rows, and 2 more variables: X11 &lt;chr&gt;, X12 &lt;chr&gt;</code></pre>
+<p>Clasico de SIISA y nuestros amigos de TI!!!</p>
+<p> </p>
+<pre class="r"><code>library(readr)
+read_csv(&quot;bases/PRIMAS_EJE_CARGA.csv&quot;, skip = 2)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   POLIZA = col_character(),
+##   ENDOSO = col_double(),
+##   ID_CONS = col_double(),
+##   PRIMA = col_double(),
+##   PATERNO = col_character(),
+##   MATERNO = col_character(),
+##   NOMBRE = col_character(),
+##   NOMBRE_2 = col_character(),
+##   SEXO = col_character(),
+##   PLAZO = col_double(),
+##   SEG_SOCIAL = col_double(),
+##   ID_PROD = col_double()
+## )</code></pre>
+<pre><code>## # A tibble: 23,345 x 12
+##    POLIZA ENDOSO ID_CONS  PRIMA PATERNO MATERNO NOMBRE NOMBRE_2 SEXO  PLAZO
+##    &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
+##  1 D00- ~      1       1 20975. MURRIE~ GAREY   LETIC~ &lt;NA&gt;     F        15
+##  2 D00- ~      2       2 32022. MEZA    MEZA    OMAR   &lt;NA&gt;     M        15
+##  3 D00- ~      1       3 60285. LOPEZ   ARAGON  AARON  FEDERICO M        21
+##  4 D00- ~      2       4  8425. CARDONA GUEVARA AARON  IVAN     M        21
+##  5 D00- ~      1       5 28429. JAVIER  MARQUEZ AARON  ALEJAND~ M        27
+##  6 D00- ~      2       6 15936. CASTIL~ RANGEL  AARON  &lt;NA&gt;     M         9
+##  7 D00- ~      1       7 14032. GUERRE~ RODRIG~ AARON  &lt;NA&gt;     M        15
+##  8 D00- ~      2       8  3767. BENCOMO RUBIO   AARON  MARTIN   M         9
+##  9 D00- ~      1       9  1742. GARCIA  RAMON   AARON  NEFTALI  M         3
+## 10 D00- ~      2      10 16206. SEGUNDO DIONIC~ AARON  MELCHOR  M        15
+## # ... with 23,335 more rows, and 2 more variables: SEG_SOCIAL &lt;dbl&gt;,
+## #   ID_PROD &lt;dbl&gt;</code></pre>
+<p> </p>
+<pre class="r"><code>primas &lt;- read_csv(&quot;bases/PRIMAS_EJE_CARGA.csv&quot;, skip = 2, n_max = 5)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   POLIZA = col_character(),
+##   ENDOSO = col_double(),
+##   ID_CONS = col_double(),
+##   PRIMA = col_double(),
+##   PATERNO = col_character(),
+##   MATERNO = col_character(),
+##   NOMBRE = col_character(),
+##   NOMBRE_2 = col_character(),
+##   SEXO = col_character(),
+##   PLAZO = col_double(),
+##   SEG_SOCIAL = col_double(),
+##   ID_PROD = col_double()
+## )</code></pre>
+<p> </p>
+<pre class="r"><code>#install.packages(&quot;data.table&quot;)
+library(data.table)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;data.table&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     between, first, last</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     transpose</code></pre>
+<pre class="r"><code>primas_fread &lt;- fread(&quot;bases/PRIMAS_EJE_CARGA.csv&quot;, skip = 2, sep = &quot;,&quot;)
+head(primas_fread,5)</code></pre>
+<pre><code>##         POLIZA ENDOSO ID_CONS    PRIMA  PATERNO MATERNO  NOMBRE  NOMBRE_2
+## 1: D00- 201901      1       1 20975.47 MURRIETA   GAREY LETICIA          
+## 2: D00- 201901      2       2 32021.65     MEZA    MEZA    OMAR          
+## 3: D00- 201901      1       3 60285.43    LOPEZ  ARAGON   AARON  FEDERICO
+## 4: D00- 201901      2       4  8425.26  CARDONA GUEVARA   AARON      IVAN
+## 5: D00- 201901      1       5 28428.92   JAVIER MARQUEZ   AARON ALEJANDRO
+##    SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1:    F    15          1     720
+## 2:    M    15          2     700
+## 3:    M    21          1     700
+## 4:    M    21          1     700
+## 5:    M    27          1     700</code></pre>
+<p> </p>
+<p>Ahora validamos ó exploramos los datos que cargamos en el ambiente con las siguientes funciones estadísticas</p>
+<pre class="r"><code>class(primas_fread)</code></pre>
+<pre><code>## [1] &quot;data.table&quot; &quot;data.frame&quot;</code></pre>
+<p> </p>
+<p>Podemos obtener aún más</p>
+<pre class="r"><code>library(dplyr)
+glimpse(primas_fread)</code></pre>
+<pre><code>## Observations: 23,345
+## Variables: 12
+## $ POLIZA     &lt;chr&gt; &quot;D00- 201901&quot;, &quot;D00- 201901&quot;, &quot;D00- 201901&quot;, &quot;D00- ...
+## $ ENDOSO     &lt;int&gt; 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, ...
+## $ ID_CONS    &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ...
+## $ PRIMA      &lt;dbl&gt; 20975.47, 32021.65, 60285.43, 8425.26, 28428.92, 15...
+## $ PATERNO    &lt;chr&gt; &quot;MURRIETA&quot;, &quot;MEZA&quot;, &quot;LOPEZ&quot;, &quot;CARDONA&quot;, &quot;JAVIER&quot;, &quot;...
+## $ MATERNO    &lt;chr&gt; &quot;GAREY&quot;, &quot;MEZA&quot;, &quot;ARAGON&quot;, &quot;GUEVARA&quot;, &quot;MARQUEZ&quot;, &quot;R...
+## $ NOMBRE     &lt;chr&gt; &quot;LETICIA&quot;, &quot;OMAR&quot;, &quot;AARON&quot;, &quot;AARON&quot;, &quot;AARON&quot;, &quot;AARO...
+## $ NOMBRE_2   &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;FEDERICO&quot;, &quot;IVAN&quot;, &quot;ALEJANDRO&quot;, &quot;&quot;, &quot;&quot;, &quot;M...
+## $ SEXO       &lt;chr&gt; &quot;F&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;...
+## $ PLAZO      &lt;int&gt; 15, 15, 21, 21, 27, 9, 15, 9, 3, 15, 15, 15, 21, 9,...
+## $ SEG_SOCIAL &lt;int&gt; 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, ...
+## $ ID_PROD    &lt;int&gt; 720, 700, 700, 700, 700, 720, 700, 720, 700, 700, 7...</code></pre>
+<p> </p>
+<p>Un poco más</p>
+<pre class="r"><code>str(primas_fread)</code></pre>
+<pre><code>## Classes &#39;data.table&#39; and &#39;data.frame&#39;:   23345 obs. of  12 variables:
+##  $ POLIZA    : chr  &quot;D00- 201901&quot; &quot;D00- 201901&quot; &quot;D00- 201901&quot; &quot;D00- 201901&quot; ...
+##  $ ENDOSO    : int  1 2 1 2 1 2 1 2 1 2 ...
+##  $ ID_CONS   : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ PRIMA     : num  20975 32022 60285 8425 28429 ...
+##  $ PATERNO   : chr  &quot;MURRIETA&quot; &quot;MEZA&quot; &quot;LOPEZ&quot; &quot;CARDONA&quot; ...
+##  $ MATERNO   : chr  &quot;GAREY&quot; &quot;MEZA&quot; &quot;ARAGON&quot; &quot;GUEVARA&quot; ...
+##  $ NOMBRE    : chr  &quot;LETICIA&quot; &quot;OMAR&quot; &quot;AARON&quot; &quot;AARON&quot; ...
+##  $ NOMBRE_2  : chr  &quot;&quot; &quot;&quot; &quot;FEDERICO&quot; &quot;IVAN&quot; ...
+##  $ SEXO      : chr  &quot;F&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ PLAZO     : int  15 15 21 21 27 9 15 9 3 15 ...
+##  $ SEG_SOCIAL: int  1 2 1 1 1 1 1 1 1 1 ...
+##  $ ID_PROD   : int  720 700 700 700 700 720 700 720 700 700 ...
+##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
+<p> </p>
+<p>la mejor información!!!</p>
+<pre class="r"><code>summary(primas_fread)</code></pre>
+<pre><code>##     POLIZA              ENDOSO          ID_CONS          PRIMA       
+##  Length:23345       Min.   : 1.000   Min.   :    1   Min.   : -2335  
+##  Class :character   1st Qu.: 1.000   1st Qu.: 5837   1st Qu.:  5637  
+##  Mode  :character   Median : 2.000   Median :11673   Median : 11046  
+##                     Mean   : 1.504   Mean   :11673   Mean   : 14705  
+##                     3rd Qu.: 2.000   3rd Qu.:17509   3rd Qu.: 19253  
+##                     Max.   :33.000   Max.   :23345   Max.   :415787  
+##    PATERNO            MATERNO             NOMBRE         
+##  Length:23345       Length:23345       Length:23345      
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+##                                                          
+##    NOMBRE_2             SEXO               PLAZO         SEG_SOCIAL   
+##  Length:23345       Length:23345       Min.   : 3.00   Min.   :1.000  
+##  Class :character   Class :character   1st Qu.: 9.00   1st Qu.:1.000  
+##  Mode  :character   Mode  :character   Median :15.00   Median :1.000  
+##                                        Mean   :16.18   Mean   :1.137  
+##                                        3rd Qu.:21.00   3rd Qu.:1.000  
+##                                        Max.   :34.00   Max.   :4.000  
+##     ID_PROD    
+##  Min.   : 242  
+##  1st Qu.: 638  
+##  Median : 700  
+##  Mean   : 669  
+##  3rd Qu.: 700  
+##  Max.   :1780</code></pre>
 <p> </p>
 </div>
 </div>

@@ -9,7 +9,7 @@ Workshop de R, 8 sesiones de aprendizaje desde cero de R para no programadores c
 
 ## Bases
 
-##Ejercicios
+## Ejercicios
 
 
 > Science is to understand your way...

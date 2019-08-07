@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + Welcome!
 + Getting Started with R Programming
 + R_Basico_1.0
++ R_Basico_1.1
 
 &nbsp;
 
@@ -315,7 +316,7 @@ myfun2(4)
 myfun2(2, n=3)
 ```
 
-**R LOOP´S**
+**R LOOP´S** (While - For)
 
 Sintaxis *WHILE*:
 
@@ -383,7 +384,7 @@ for (i in años){
 ```
 &nbsp;
 
-**R FUNCTION´S**
+**R FUNCTION´S**  (Ifelse - Which)
 
 
 Sintaxis *IFELSE*:
@@ -436,5 +437,138 @@ which(letters == "g")
 &nbsp;
 
 Nota. Para más detalles consulten los documentos de apoyo del repo de git en el documento `refcard_2.0_operators_others`
+
+&nbsp;
+
+### R_Basico_1.1
+
+`OBJETIVO:` **Como cargar datos, paquetes y librerias**
+
+&nbsp;
+
+
+Cargando nuestros datos
+
+R tiene algunas formas de leer archivos, los mas comunes son tablas, archivos planos, archivos con alguna codificacion especifica o estructurada. Aunque no sera el objetivo del curso, leer cadenas de texto, datos sin estructuras definidas o espcificas y archivos sin algun tipo de orden, es algo que tambien se puede hacer en R. 
+
+Para leer datos de un archivo, primero deben saber que tipo de archivo es, es decir, su extension. La tabla de abajo muestra una lista de funciones que pueden ser importadas segun el formato del archivo.
+
+  tipo de datos                 funcion         paquete 
+  ------------------------- ---------------  --------
+  comma separated (.csv)    `read_csv()`     readr
+  other delimited formats   `read_delim()`   readr
+  R (.Rds)                  `read_rds()`     readr
+  Stata (.dta)              `read_dta()`     haven   
+  SPSS (.sav)               `read_spss()`    haven   
+  SAS (.sas7bdat)           `read_sas()`     haven   
+  Excel (.xls, .xlsx)       `read_excel()`   readxl  
+  regular delimited files   `fread()`        data.table 
+
+
+Nota. Mas información ver documento de apoyo `data-import`
+
+&nbsp;
+
+Paqueterias de R ó los famosos *packages*
+
+Los paquetes de R pueden ser instalados desde el famoso CRAN, el cual es una red de archivos de alta gama. Para ello deberán  usar la función `install.packages`. Cuando instalan un paquete ponen una copia en la computadora de forma local, pero aun no lo hace "usable", solo esta "disponible". Para usarlo deberan adjuntar o cargar la funcion de `library`.
+
+Gracias a nuestro amigo Hadley y otros colaboradores, en este curso usaremos para prueba de carga el famoso "the tidyverse". `Tidyverse` nos brinda grandes herramientas para manipulación basica y avanzada de datos, es muy funcional, facíl e intuitiva. 
+
+&nbsp;
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+```
+```{r}
+library(tidyverse)
+```
+
+&nbsp;
+
+Nota. Ayuda en  R
+
+Podemos usar la función `help` o el operador al inicio de cada sentencia `?`.
+
+```{r}
+#help(help)
+#?str
+```
+
+&nbsp;
+
+Cargando nuestro primer archivo:
+
+```{r}
+read_csv("bases/PRIMAS_EJE_CARGA.csv")
+```
+
+UPS!! Problemas!!!
+
+&nbsp;
+
+Hagamos que este disponible la libreria...
+
+```{r}
+library(readr)
+read_csv("bases/PRIMAS_EJE_CARGA.csv")
+```
+
+Clasico de SIISA y nuestros amigos de TI!!!
+
+&nbsp;
+
+```{r}
+library(readr)
+read_csv("bases/PRIMAS_EJE_CARGA.csv", skip = 2)
+```
+
+&nbsp;
+
+```{r}
+primas <- read_csv("bases/PRIMAS_EJE_CARGA.csv", skip = 2, n_max = 5)
+```
+
+&nbsp;
+
+```{r}
+#install.packages("data.table")
+library(data.table)
+primas_fread <- fread("bases/PRIMAS_EJE_CARGA.csv", skip = 2, sep = ",")
+head(primas_fread,5)
+```
+
+&nbsp;
+
+Ahora validamos ó exploramos los datos que cargamos en el ambiente con las siguientes funciones estadísticas
+
+```{r}
+class(primas_fread)
+```
+
+&nbsp;
+
+Podemos obtener aún más
+
+```{r}
+library(dplyr)
+glimpse(primas_fread)
+```
+
+&nbsp;
+
+Un poco más
+
+```{r}
+str(primas_fread)
+```
+
+&nbsp;
+
+la mejor información!!!
+
+```{r}
+summary(primas_fread)
+```
 
 &nbsp;
