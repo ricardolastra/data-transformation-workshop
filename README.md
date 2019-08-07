@@ -9,6 +9,8 @@ Workshop de R, 8 sesiones de aprendizaje desde cero de R para no programadores c
 
 ## Bases
 
+*Las bases para fines didacticos que ocuparemos están [aquí.](bases/)
+
 ## Ejercicios
 
 

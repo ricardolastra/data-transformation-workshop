@@ -572,3 +572,9 @@ summary(primas_fread)
 ```
 
 &nbsp;
+
+El artículo a discutir al inicio de la prÓxima sesión es el siguiente:
+
+https://www.elfinanciero.com.mx/tech/por-que-tus-hijos-deberian-aprender-a-programar
+
+&nbsp;
