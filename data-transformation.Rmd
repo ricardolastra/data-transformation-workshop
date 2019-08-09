@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + Getting Started with R Programming
 + R_Basico_1.0
 + R_Basico_1.1
++ R_Basico_1.2
 
 &nbsp;
 
@@ -573,8 +574,134 @@ summary(primas_fread)
 
 &nbsp;
 
-El artículo a discutir al inicio de la prÓxima sesión es el siguiente:
+El artículo a discutir al inicio de la sesión numero 3 es el siguiente:
 
 https://www.elfinanciero.com.mx/tech/por-que-tus-hijos-deberian-aprender-a-programar
 
 &nbsp;
+
+### R_Basico_1.2
+
+`OBJETIVO:` **Manejo de datos**
+
+&nbsp;
+
+Normalmente los datos en R son almacenados como `data.frame`
+
+Un data.frame es una lista de vectores de la misma longitud, piensenlos como una tabla de observaciones (individuos), cada entrada del vector en la lista forma una columna, cada columna puede ser de diferente tipo, conocemos a las columnas como variables y a las filas como observaciones.
+
+Un data.frame tiene entonces dos dimensiones correspondientes al numero de filas y columnas, en ese estricto orden. 
+
+Empezaremos a hacer nuestros primeros subsets, muy utiles en la vida real.
+
+&nbsp;
+
+Empezamos con un clasico, `filter`
+
+```{r}
+filter(primas_fread, PLAZO == 34 & SEXO == "F")
+```
+
+
+
+```{r}
+filter(primas_fread, PLAZO == 3, NOMBRE %in% c("AARON", "RICARDO"))
+```
+
+&nbsp;
+
+Buen acceso a ciertas observaciones, `slice`
+
+```{r}
+slice(primas_fread, 1:5)
+```
+Que pasó aqui?
+
+```{r}
+head(slice(primas_fread,-c(1,2)))
+```
+Revisemos con un `head` y un `tail`
+
+```{r}
+head(primas_fread)
+```
+```{r}
+tail(primas_fread)
+```
+
+&nbsp;
+
+Entonces `slice` y `filter` se usan para extraer algun tipo de "observación, row, fila, value, entrada, etc.", de la misma forma usamos `select` para acceder a las columnas.
+
+
+
+```{r}
+select(slice(primas_fread, 23340:23345), c(PATERNO, MATERNO, NOMBRE))
+```
+
+...podemos usar algo super util como el simbolo de `$`, el cual nos ayudara a acceder a una columna especifica de un df
+
+
+```{r}
+sd(primas_fread$PRIMA)
+```
+o tambien...
+ 
+```{r}
+mean(primas_fread$PRIMA)
+```
+&nbsp;
+
+> Ejercicio 1
+
+El objetivo del siguiente ejericio es para que practiquen, algunas cosas que hemos aprendido, traten de hacerlo siguiendo las notas, recuerden que deben de tener instalado y cargado el `tidyverse`.
+
+Usen el archivo que esta en la carpeta de las [bases](https://github.com/ricardolastra/data-transformation-workshop/tree/master/bases) de mi repo denominado `PRIMAS_EJE_AUTOS.csv`.
+
+&nbsp;
+
+  a) Lean la base del ejericio con alguna función de la libreria `readr`,  y limiten la lectura a 20 rows.
+
+```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+read_csv("C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/Workshop_Seguros/bases/PRIMAS_EJE_AUTOS.csv", n_max = 20)
+```
+
+&nbsp;
+
+  b) Lean TODA la base del ejericio y asignen la información a una variable, traten de quitar el encabezado feo de los reportes de SIISA. 
+
+
+```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
+library(readr)
+test <- read_csv("C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/data-transformation-workshop/bases/PRIMAS_EJE_AUTOS.csv", skip = 2)
+```
+&nbsp;
+
+  c) Ahora, con su variable, usen por lo menos dos de las funciones para exploración de datos.
+
+```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
+summary(test)
+```
+
+```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
+str(test)
+```
+&nbsp;
+
+  d) Por último, de la información que ahora esta en su variable, usando LOOP´S (for e ifelse) reemplacen los productos (ID_PROD) que sean IGUALES a 700 por el producto (ID_PROD) 750.
+
+```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
+for (i in test$ID_PROD){
+  i<-ifelse(i==700,750,i)
+}                  
+```
+&nbsp;
+
+Revisen el siguiente video para comentarlo la proxima sesión.
+
+https://youtu.be/sTNfFatKfoI
+
+
+
+

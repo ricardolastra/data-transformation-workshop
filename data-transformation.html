@@ -386,6 +386,7 @@ $(document).ready(function () {
 <li>Getting Started with R Programming</li>
 <li>R_Basico_1.0</li>
 <li>R_Basico_1.1</li>
+<li>R_Basico_1.2</li>
 </ul>
 <p> </p>
 <div id="welcome" class="section level3">
@@ -1009,9 +1010,163 @@ glimpse(primas_fread)</code></pre>
 ##  3rd Qu.: 700  
 ##  Max.   :1780</code></pre>
 <p> </p>
-<p>El artículo a discutir al inicio de la prÓxima sesión es el siguiente:</p>
+<p>El artículo a discutir al inicio de la sesión numero 3 es el siguiente:</p>
 <p><a href="https://www.elfinanciero.com.mx/tech/por-que-tus-hijos-deberian-aprender-a-programar" class="uri">https://www.elfinanciero.com.mx/tech/por-que-tus-hijos-deberian-aprender-a-programar</a></p>
 <p> </p>
+</div>
+<div id="r_basico_1.2" class="section level3">
+<h3>R_Basico_1.2</h3>
+<p><code>OBJETIVO:</code> <strong>Manejo de datos</strong></p>
+<p> </p>
+<p>Normalmente los datos en R son almacenados como <code>data.frame</code></p>
+<p>Un data.frame es una lista de vectores de la misma longitud, piensenlos como una tabla de observaciones (individuos), cada entrada del vector en la lista forma una columna, cada columna puede ser de diferente tipo, conocemos a las columnas como variables y a las filas como observaciones.</p>
+<p>Un data.frame tiene entonces dos dimensiones correspondientes al numero de filas y columnas, en ese estricto orden.</p>
+<p>Empezaremos a hacer nuestros primeros subsets, muy utiles en la vida real.</p>
+<p> </p>
+<p>Empezamos con un clasico, <code>filter</code></p>
+<pre class="r"><code>filter(primas_fread, PLAZO == 34 &amp; SEXO == &quot;F&quot;)</code></pre>
+<pre><code>##        POLIZA ENDOSO ID_CONS    PRIMA   PATERNO MATERNO NOMBRE   NOMBRE_2
+## 1 D00- 201901      1   16619 18224.27 HERNANDEZ MORALES  MARIA DEL CARMEN
+##   SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1    F    34          1    1780</code></pre>
+<pre class="r"><code>filter(primas_fread, PLAZO == 3, NOMBRE %in% c(&quot;AARON&quot;, &quot;RICARDO&quot;))</code></pre>
+<pre><code>##         POLIZA ENDOSO ID_CONS    PRIMA    PATERNO   MATERNO  NOMBRE
+## 1  D00- 201901      1       9  1742.10     GARCIA     RAMON   AARON
+## 2  D00- 201901      2      16  4997.92      REYES    URBINA   AARON
+## 3  D00- 201901      1      17  9411.26 DE LA ROSA      SOTO   AARON
+## 4  D00- 201901      2      22  1086.45     TORRES    ALONSO   AARON
+## 5  D00- 201901      2   20218  7138.09    RAMIREZ      MAAS RICARDO
+## 6  D00- 201901      1   20241  3867.84   OCEGUERA     GOMEZ RICARDO
+## 7  D00- 201901      2   20242  3911.27     JUAREZ   RAMIREZ RICARDO
+## 8  D00- 201901      2   20256  3892.39   MARTINEZ    GARCIA RICARDO
+## 9  D00- 201901      2   20274  3905.70     FLORES    GARCIA RICARDO
+## 10 D00- 201901      1   20275  3107.25     BURGOS  GAMONEDA RICARDO
+## 11 D00- 201901      1   20291  3440.37     MORENO     OLIVA RICARDO
+## 12 D00- 201901      2   20304 13680.13       NAVA CERVANTES RICARDO
+## 13 D00- 201901      1   20305 16946.59       NAVA CERVANTES RICARDO
+## 14 D00- 201901      1   20325  8340.28  FRANCISCO    JUAREZ RICARDO
+## 15 D00- 201901      1   20345 10971.09   RENTERIA     SALAS RICARDO
+## 16 D00- 201901      1   20347  3140.36 ALTAMIRANO   PIZARRO RICARDO
+##     NOMBRE_2 SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1    NEFTALI    M     3          1     700
+## 2     ADRIAN    M     3          1     700
+## 3    ALBERTO    M     3          1     700
+## 4   EMMANUEL    M     3          1     700
+## 5               M     3          1     700
+## 6               M     3          1     754
+## 7    ALBERTO    M     3          1     700
+## 8    ANTONIO    M     3          1     700
+## 9               M     3          1     700
+## 10              M     3          1     700
+## 11              M     3          1     700
+## 12 FRANCISCO    M     3          1     700
+## 13              M     3          1     700
+## 14              M     3          1     700
+## 15     DARIO    M     3          1     700
+## 16              M     3          1     700</code></pre>
+<p> </p>
+<p>Buen acceso a ciertas observaciones, <code>slice</code></p>
+<pre class="r"><code>slice(primas_fread, 1:5)</code></pre>
+<pre><code>##        POLIZA ENDOSO ID_CONS    PRIMA  PATERNO MATERNO  NOMBRE  NOMBRE_2
+## 1 D00- 201901      1       1 20975.47 MURRIETA   GAREY LETICIA          
+## 2 D00- 201901      2       2 32021.65     MEZA    MEZA    OMAR          
+## 3 D00- 201901      1       3 60285.43    LOPEZ  ARAGON   AARON  FEDERICO
+## 4 D00- 201901      2       4  8425.26  CARDONA GUEVARA   AARON      IVAN
+## 5 D00- 201901      1       5 28428.92   JAVIER MARQUEZ   AARON ALEJANDRO
+##   SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1    F    15          1     720
+## 2    M    15          2     700
+## 3    M    21          1     700
+## 4    M    21          1     700
+## 5    M    27          1     700</code></pre>
+<p>Que pasó aqui?</p>
+<pre class="r"><code>head(slice(primas_fread,-c(1,2)))</code></pre>
+<pre><code>##        POLIZA ENDOSO ID_CONS    PRIMA  PATERNO   MATERNO NOMBRE  NOMBRE_2
+## 1 D00- 201901      1       3 60285.43    LOPEZ    ARAGON  AARON  FEDERICO
+## 2 D00- 201901      2       4  8425.26  CARDONA   GUEVARA  AARON      IVAN
+## 3 D00- 201901      1       5 28428.92   JAVIER   MARQUEZ  AARON ALEJANDRO
+## 4 D00- 201901      2       6 15935.75 CASTILLO    RANGEL  AARON          
+## 5 D00- 201901      1       7 14032.46 GUERRERO RODRIGUEZ  AARON          
+## 6 D00- 201901      2       8  3766.85  BENCOMO     RUBIO  AARON    MARTIN
+##   SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1    M    21          1     700
+## 2    M    21          1     700
+## 3    M    27          1     700
+## 4    M     9          1     720
+## 5    M    15          1     700
+## 6    M     9          1     720</code></pre>
+<p>Revisemos con un <code>head</code> y un <code>tail</code></p>
+<pre class="r"><code>head(primas_fread)</code></pre>
+<pre><code>##         POLIZA ENDOSO ID_CONS    PRIMA  PATERNO MATERNO  NOMBRE  NOMBRE_2
+## 1: D00- 201901      1       1 20975.47 MURRIETA   GAREY LETICIA          
+## 2: D00- 201901      2       2 32021.65     MEZA    MEZA    OMAR          
+## 3: D00- 201901      1       3 60285.43    LOPEZ  ARAGON   AARON  FEDERICO
+## 4: D00- 201901      2       4  8425.26  CARDONA GUEVARA   AARON      IVAN
+## 5: D00- 201901      1       5 28428.92   JAVIER MARQUEZ   AARON ALEJANDRO
+## 6: D00- 201901      2       6 15935.75 CASTILLO  RANGEL   AARON          
+##    SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1:    F    15          1     720
+## 2:    M    15          2     700
+## 3:    M    21          1     700
+## 4:    M    21          1     700
+## 5:    M    27          1     700
+## 6:    M     9          1     720</code></pre>
+<pre class="r"><code>tail(primas_fread)</code></pre>
+<pre><code>##         POLIZA ENDOSO ID_CONS    PRIMA  PATERNO MATERNO     NOMBRE
+## 1: D00- 201901      2   23340  1923.02  PEDRAZA    PE?A ZURISADDAI
+## 2: D00- 201901      1   23341 15031.21    PINTO  DUARTE ZURISADDAI
+## 3: D00- 201901      2   23342 14564.44   ESPA?A   PEREZ      ZUSET
+## 4: D00- 201901      1   23343  5693.09 QUINTERO  GARCIA     ZUXCEL
+## 5: D00- 201901      2   23344 12837.95  ESCOBAR SANCHEZ     ZYANYA
+## 6: D00- 201901      3   23345 30091.90 VALENCIA   LOPEZ    ZYZLILA
+##    NOMBRE_2 SEXO PLAZO SEG_SOCIAL ID_PROD
+## 1:             F    15          4     642
+## 2:             F    27          4     638
+## 3:             F    15          1     638
+## 4: CRISTINA    F    27          1     638
+## 5:  MARIANA    F    27          1     638
+## 6:             F     9          1     638</code></pre>
+<p> </p>
+<p>Entonces <code>slice</code> y <code>filter</code> se usan para extraer algun tipo de “observación, row, fila, value, entrada, etc.”, de la misma forma usamos <code>select</code> para acceder a las columnas.</p>
+<pre class="r"><code>select(slice(primas_fread, 23340:23345), c(PATERNO, MATERNO, NOMBRE))</code></pre>
+<pre><code>##    PATERNO MATERNO     NOMBRE
+## 1  PEDRAZA    PE?A ZURISADDAI
+## 2    PINTO  DUARTE ZURISADDAI
+## 3   ESPA?A   PEREZ      ZUSET
+## 4 QUINTERO  GARCIA     ZUXCEL
+## 5  ESCOBAR SANCHEZ     ZYANYA
+## 6 VALENCIA   LOPEZ    ZYZLILA</code></pre>
+<p>…podemos usar algo super util como el simbolo de <code>$</code>, el cual nos ayudara a acceder a una columna especifica de un df</p>
+<pre class="r"><code>sd(primas_fread$PRIMA)</code></pre>
+<pre><code>## [1] 14830.78</code></pre>
+<p>o tambien…</p>
+<pre class="r"><code>mean(primas_fread$PRIMA)</code></pre>
+<pre><code>## [1] 14704.87</code></pre>
+<p> </p>
+<blockquote>
+<p>Ejercicio 1</p>
+</blockquote>
+<p>El objetivo del siguiente ejericio es para que practiquen, algunas cosas que hemos aprendido, traten de hacerlo siguiendo las notas, recuerden que deben de tener instalado y cargado el <code>tidyverse</code>.</p>
+<p>Usen el archivo que esta en la carpeta de las <a href="https://github.com/ricardolastra/data-transformation-workshop/tree/master/bases">bases</a> de mi repo denominado <code>PRIMAS_EJE_AUTOS.csv</code>.</p>
+<p> </p>
+<ol style="list-style-type: lower-alpha">
+<li>Lean la base del ejericio con alguna función de la libreria <code>readr</code>, y limiten la lectura a 20 rows.</li>
+</ol>
+<p> </p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Lean TODA la base del ejericio y asignen la información a una variable, traten de quitar el encabezado feo de los reportes de SIISA.</li>
+</ol>
+<p> </p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Ahora, con su variable, usen por lo menos dos de las funciones para exploración de datos.</li>
+</ol>
+<p> </p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Por último, de la información que ahora esta en su variable, usando LOOP´S (for e ifelse) reemplacen los productos (ID_PROD) que sean IGUALES a 700 por el producto (ID_PROD) 750.</li>
+</ol>
+<p> </p>
+<p>Revisen el siguiente video para comentarlo la proxima sesión.</p>
+<p><a href="https://youtu.be/sTNfFatKfoI" class="uri">https://youtu.be/sTNfFatKfoI</a></p>
 </div>
 </div>
 
