@@ -387,6 +387,7 @@ $(document).ready(function () {
 <li>R_Basico_1.0</li>
 <li>R_Basico_1.1</li>
 <li>R_Basico_1.2</li>
+<li>R_dplyr</li>
 </ul>
 <p> </p>
 <div id="welcome" class="section level3">
@@ -778,12 +779,12 @@ div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
 <p> </p>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages ------------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## -- Attaching packages ---------------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
 <pre><code>## v ggplot2 3.1.1       v purrr   0.3.2  
 ## v tibble  2.1.1       v dplyr   0.8.0.1
 ## v tidyr   0.8.3       v stringr 1.4.0  
 ## v readr   1.3.1       v forcats 0.4.0</code></pre>
-<pre><code>## -- Conflicts ---------------------------------------------------------------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts ------------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <p> </p>
@@ -1167,6 +1168,297 @@ glimpse(primas_fread)</code></pre>
 <p> </p>
 <p>Revisen el siguiente video para comentarlo la proxima sesión.</p>
 <p><a href="https://youtu.be/sTNfFatKfoI" class="uri">https://youtu.be/sTNfFatKfoI</a></p>
+<p> </p>
+</div>
+<div id="r_dplyr" class="section level3">
+<h3>R_dplyr</h3>
+<p><code>OBJETIVO:</code> <strong>Pipes, datos en forma tidy y vervos de la librería</strong></p>
+<p> </p>
+<p>Sigan cuidadosamente las siguientes instrucciones, inicien RStudio y generen un nuevo proyecto:</p>
+<ul>
+<li>En Windows click en el botón de Inicio y busquen Rstudio.</li>
+<li>Ya en Rstudio den click en <code>File -&gt; New Project... -&gt; Existing Directory -&gt; Browse... -&gt; seleccionar carpeta destino -&gt; Open -&gt; Create Project</code></li>
+<li>Ya que se abre otra pantalla de R, dar click en <code>File -&gt; New File -&gt; R script</code></li>
+<li>Guárdenlo en su carpeta del Proyecto nuevo que acabamos de crear. <code>File -&gt; Save As -&gt; ruta a su carpeta y nombre del file</code></li>
+<li>Instalen <code>dplyr</code>(en caso de no tenerlo aún)</li>
+<li>Iniciemos con lo siguiente:</li>
+</ul>
+<p> </p>
+<p>Debemos cargar el archivo <em>ART_492_JUNIO_2019</em> con varias pestañas, contribucion de nuestro amigo LEE.</p>
+<p>De la siguiente forma cargamos 1 sola pestaña, pero no es la escencia de esto.</p>
+<pre class="r"><code>library(dplyr)
+library(readxl)
+pestaña &lt;- read_excel(&quot;C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/ART_492_JUNIO_2019.xlsx&quot;, sheet = 2)
+head(pestaña)</code></pre>
+<p> </p>
+<p>Revisamos de la siguiente manera las pestañas y seleccionamos la que queremos revisar.</p>
+<pre class="r"><code>#recuerden que el path de cada equipo es diferente
+ruta &lt;- &quot;C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/ART_492_JUNIO_2019.xlsx&quot;
+excel_sheets(path = ruta)</code></pre>
+<pre><code>##  [1] &quot;SERGIO CARBALLO (2)&quot;     &quot;AGENTES SERGIO CARBALLO&quot;
+##  [3] &quot;MARCELA HUERTA (2)&quot;      &quot;JOSE MARIA GARCIA (2)&quot;  
+##  [5] &quot;JORGE VERGARA MACIP&quot;     &quot;JOSE MARIA GARCIA&quot;      
+##  [7] &quot;JERRY O´HEA (2)&quot;         &quot;JERRY O´HEA&quot;            
+##  [9] &quot;SERGIO CARBALLO&quot;         &quot;MICHAEL SCHITTEK&quot;       
+## [11] &quot; AGENTES MICHAEL&quot;        &quot;MARCELA HUERTA&quot;         
+## [13] &quot;ADEUDOS TOTAL&quot;           &quot;DETALLE POR ANALISTA&quot;   
+## [15] &quot;Hoja6&quot;</code></pre>
+<p>Ojo. Muestra inclusive las pestañas que est ocultas.</p>
+<p> </p>
+<p>Cargamos el archivo y la pestaña deseada:</p>
+<pre class="r"><code>emision &lt;- read_excel(path = ruta, sheet = &quot;SERGIO CARBALLO&quot;)
+head(emision)</code></pre>
+<p> </p>
+<p>Revisamos los datos:</p>
+<pre class="r"><code>summary(emision)</code></pre>
+<p> </p>
+<p><strong>Verbos de <code>dplyr</code> que usaremos:</strong></p>
+<ul>
+<li>mutate() adds new variables that are functions of existing variables</li>
+<li>select() picks variables based on their names.</li>
+<li>filter() picks cases based on their values.</li>
+<li>summarise() reduces multiple values down to a single summary.</li>
+<li>arrange() changes the ordering of the rows.</li>
+</ul>
+<p>Provided by <a href="https://dplyr.tidyverse.org/" class="uri">https://dplyr.tidyverse.org/</a></p>
+<p><strong>Nota. Usaremos un simbolo muy curioso para todo esto, operator(%&gt;%)</strong></p>
+<p> </p>
+<p>Iniciamos con el verbo <code>mutate()</code>, el cual nos genera una nueva variable a partir de la suma de columnas seleccionadas que contienen cierta condición.</p>
+<pre class="r"><code>emision_modificado &lt;- emision %&gt;%
+  mutate(CUENTA_DOCS = rowSums(.[24:43]==&quot;Si&quot;, na.rm=TRUE))</code></pre>
+<p> </p>
+<p>Revisamos como quedo el nuevo dataset.</p>
+<pre class="r"><code>head(emision_modificado)</code></pre>
+<p> </p>
+<pre class="r"><code>emision_modificado &lt;- emision_modificado %&gt;%
+  mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100)
+#Revisamos la nueva variable
+summary(emision_modificado$PORCENTAJE_CUMPLI)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   0.000   0.000   0.000   1.975   0.000  13.953</code></pre>
+<p> </p>
+<p>Ahora revisamos que hace el verbo <code>select()</code>.</p>
+<pre class="r"><code>emision_res &lt;- emision_modificado %&gt;%
+  select(c(&quot;Sucursal&quot;,&quot;Nombre Sucursal&quot;,&quot;Prima Convertida&quot;))</code></pre>
+<p> </p>
+<pre class="r"><code>colnames(emision_res)</code></pre>
+<pre><code>## [1] &quot;Sucursal&quot;         &quot;Nombre Sucursal&quot;  &quot;Prima Convertida&quot;</code></pre>
+<p> </p>
+<p>No guardamos lo siguiente en la variable, solo observen que pasa.</p>
+<pre class="r"><code>emision_modificado %&gt;%
+  select(ends_with(&quot;ramo&quot;)) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##    Ramo `Descripcion Ramo` Subramo `Descripcion Subramo`
+##   &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;                
+## 1     7 PAQUETE                  3 OBRAS CIVILES        
+## 2     3 TRANSPORTES              5 CASCOS DE BUQUES     
+## 3     7 PAQUETE                  3 OBRAS CIVILES        
+## 4     7 PAQUETE                  5 MULTIPLE EMPRESARIAL 
+## 5     7 PAQUETE                  5 MULTIPLE EMPRESARIAL 
+## 6     3 TRANSPORTES              1 TRANSPORTES DE CARGA</code></pre>
+<p> </p>
+<p>Y el verbo <code>filter()</code> similar al que ya habiamos visto.</p>
+<pre class="r"><code>emision_modificado &lt;- emision_modificado %&gt;%
+  filter(`Descripcion Ramo`  == &quot;AUTOMOVILES&quot;, Subramo %in% c(1,2))</code></pre>
+<p> </p>
+<pre class="r"><code>head(emision_modificado)</code></pre>
+<pre><code>## # A tibble: 6 x 69
+##     `#` Sucursal `Nombre Sucursa~ `Prima Converti~ Agente `Razon Social`
+##   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;                       &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;         
+## 1     1 D00      MEXICO                    661200.   1593 GRUPO DE ASES~
+## 2     1 D00      MEXICO                    570791.    628 WILLIS AGENTE~
+## 3     1 D00      MEXICO                    442108.    628 WILLIS AGENTE~
+## 4     1 D70      METRO INSURGENT~          297605.   6161 MURGUIA CONSU~
+## 5     1 D00      MEXICO                    245154.    828 ASESORES PROF~
+## 6     1 D70      METRO INSURGENT~          216150.   6161 MURGUIA CONSU~
+## # ... with 63 more variables: Ramo &lt;dbl&gt;, `Descripcion Ramo` &lt;chr&gt;,
+## #   Subramo &lt;dbl&gt;, `Descripcion Subramo` &lt;chr&gt;, Ejecutivo...11 &lt;chr&gt;,
+## #   Directivo...12 &lt;chr&gt;, Ejecutivo...13 &lt;chr&gt;, Directivo...14 &lt;chr&gt;,
+## #   RFC &lt;chr&gt;, IdAseg &lt;chr&gt;, `Razón Social` &lt;chr&gt;, `Fecha de Alta` &lt;dttm&gt;,
+## #   `Fecha de Art. 140` &lt;dttm&gt;, Observaciones &lt;chr&gt;, `Tipo Persona` &lt;dbl&gt;,
+## #   `Clientes 2016 2017 2018` &lt;dbl&gt;, Moneda &lt;dbl&gt;, Póliza &lt;chr&gt;, `1
+## #   IDENTIFICACION OFICIAL&quot;` &lt;chr&gt;, `2 CLAVE UNICA DE REGISTRO DE
+## #   POBLACION (CURP)...26` &lt;chr&gt;, `3 CEDULA DE IDENTIFICACION FISCAL
+## #   (RFC)...27` &lt;chr&gt;, `4 COMPROBANTE DE DOMICILIO...28` &lt;chr&gt;, `8 FORMATO
+## #   CONOCE A TU CLIENTE...29` &lt;chr&gt;, `1 TESTIMONIO NOTARIAL O COPIA DEL
+## #   ACTA COSTITUTIVA` &lt;chr&gt;, `2 CEDULA DE IDENTIFICACION FISCAL
+## #   (RFC)` &lt;chr&gt;, `3 COMPROBANTE DE DOMICILIO` &lt;chr&gt;, `4 TESTIMONIO O
+## #   COPIA DEL PODER NOTARIAL DEL REPRESENTANTE LEGAL` &lt;chr&gt;, `5
+## #   IDENTIFICACION OFICIAL DEL REPRESENTANTE LEGAL` &lt;chr&gt;, `6 ESCRITO
+## #   FIRMADO QUE ACREDITA LA INSCRIPCION RESPECTIVA (EMPRESA DE RECIENTE
+## #   CONSTITUCION)` &lt;chr&gt;, `8 FORMATO CONOCE A TU CLIENTE...36` &lt;chr&gt;, `99
+## #   DATOS COMPLETOS...37` &lt;chr&gt;, `1 TESTIMONIO O COPIA CERTIFICADA DEL
+## #   PODER NOTARIAL` &lt;lgl&gt;, `2 CONSTANCIA DE NOMBRAMIENTO, EXPEDIDA EN
+## #   TERMINOS DEL ART. 90 DE LA LEY DE INST. DE SEGUROS` &lt;lgl&gt;, `3
+## #   IDENTIFICACION OFICIAL DEL REPRESENTANTEO REPRESENTANTES LEGALES DE LA
+## #   ENTIDAD` &lt;lgl&gt;, `4 COMPROBANTE DE DOMICILIO...41` &lt;lgl&gt;, `5 CEDULA DE
+## #   IDENTIFICACION FISCAL (RFC)` &lt;lgl&gt;, `8 FORMATO CONOCE A TU
+## #   CLIENTE...43` &lt;lgl&gt;, `9 Y/O ACTA DE MAYORIA QUE SE LE ENTREGA AL
+## #   PRESIDENTE MUNICIPAL Y LEY ORGANICA DE LA ADMINISTRACION PU` &lt;lgl&gt;,
+## #   `99 DATOS COMPLETOS...45` &lt;lgl&gt;, `1 IDENTIFICACION OFICIAL` &lt;lgl&gt;, `2
+## #   CLAVE UNICA DE REGISTRO DE POBLACION (CURP)...47` &lt;lgl&gt;, `3 CEDULA DE
+## #   IDENTIFICACION FISCAL (RFC)...48` &lt;lgl&gt;, `4 COMPROBANTE DE
+## #   DOMICILIO...49` &lt;lgl&gt;, `8 FORMATO CONOCE A TU CLIENTE...50` &lt;lgl&gt;, `99
+## #   DATOS COMPLETOS...51` &lt;lgl&gt;, `5 CARTA PODER DEL APODERADO
+## #   LEGAL` &lt;lgl&gt;, `6 IDENTIFICACION DEL APODERADO LEGAL` &lt;lgl&gt;, `7
+## #   COMPROBANTE DE DOMICILIO DEL APODERADO LEGAL` &lt;lgl&gt;, `1 PASAPORTE
+## #   ORIGINAL Y/O DOCUMENTO QUE ACREDITE SU LEGAL ESTANCIA EN TERRITORIO
+## #   MEXICANO...55` &lt;lgl&gt;, `4 COMPROBANTE DE DOMICILIO...56` &lt;lgl&gt;, `8
+## #   FORMATO CONOCE A TU CLIENTE...57` &lt;lgl&gt;, `1 COPIA LEGISLADA O
+## #   APOSTILLADA DEL DOCTO. QUE ACREDITE SU LEGAL EXISTENCIA` &lt;lgl&gt;, `2
+## #   COPIA LEGISLADA O APOSTILLADA DEL PODER DEL REPRESENTANTE LEGAL (NAL.
+## #   O EXT.)` &lt;lgl&gt;, `3 COPIA DE LA IDENTIFICACION PERSONAL OFICIAL DEL
+## #   REPRESENTANTE O REPRESENTANTES LEGALES` &lt;lgl&gt;, `4 COMPROBANTE DE
+## #   DOMICILIO...61` &lt;lgl&gt;, `8 FORMATO CONOCE A TU CLIENTE...62` &lt;lgl&gt;, `99
+## #   DATOS COMPLETOS...63` &lt;lgl&gt;, `1 PASAPORTE ORIGINAL Y/O DOCUMENTO QUE
+## #   ACREDITE SU LEGAL ESTANCIA EN TERRITORIO MEXICANO...64` &lt;lgl&gt;, `4
+## #   COMPROBANTE DE DOMICILIO...65` &lt;lgl&gt;, `8 FORMATO CONOCE A TU
+## #   CLIENTE...66` &lt;lgl&gt;, `99 DATOS COMPLETOS...67` &lt;lgl&gt;,
+## #   CUENTA_DOCS &lt;dbl&gt;, PORCENTAJE_CUMPLI &lt;dbl&gt;</code></pre>
+<p> </p>
+<p>El siguiente verbo <code>summarise()</code> es de gran utilidad, lo usaremos mucho, esperen a que lleguemos al mundo visual de <code>ggplot</code>.</p>
+<p>Tenemos la variable <strong>emision_res</strong> que tiene la extracción de solo 3 columnas, la usamos.</p>
+<pre class="r"><code>emision_res &lt;- emision_res %&gt;%
+  group_by(Sucursal) %&gt;%
+  summarise(cuenta = n())</code></pre>
+<p> </p>
+<pre class="r"><code>emision_res</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   Sucursal cuenta
+##   &lt;chr&gt;     &lt;int&gt;
+## 1 &lt;NA&gt;         50
+## 2 D00         191
+## 3 D70          10
+## 4 F04           1</code></pre>
+<p> </p>
+<p>Y por ultimo un verbo para ordenar o acomodar nuestros valores muy usado es <code>arrange()</code></p>
+<pre class="rerror"><code>emision_res %&gt;%
+  arrange(desc(cuenta))</code></pre>
+<p> </p>
+<pre class="r"><code>emision_res &lt;- emision_res %&gt;%
+  arrange(cuenta)</code></pre>
+<p> </p>
+<pre class="r"><code>emision_res</code></pre>
+<pre><code>## # A tibble: 4 x 2
+##   Sucursal cuenta
+##   &lt;chr&gt;     &lt;int&gt;
+## 1 F04           1
+## 2 D70          10
+## 3 &lt;NA&gt;         50
+## 4 D00         191</code></pre>
+<p> </p>
+<p>Quiamos espacios feos de los nombres de columnas:</p>
+<pre class="r"><code>names(emision) &lt;- gsub(&quot; &quot;, &quot;_&quot;, names(emision))
+colnames(emision)</code></pre>
+<pre><code>##  [1] &quot;#&quot;                                                                                                     
+##  [2] &quot;Sucursal&quot;                                                                                              
+##  [3] &quot;Nombre_Sucursal&quot;                                                                                       
+##  [4] &quot;Prima_Convertida&quot;                                                                                      
+##  [5] &quot;Agente&quot;                                                                                                
+##  [6] &quot;Razon_Social&quot;                                                                                          
+##  [7] &quot;Ramo&quot;                                                                                                  
+##  [8] &quot;Descripcion_Ramo&quot;                                                                                      
+##  [9] &quot;Subramo&quot;                                                                                               
+## [10] &quot;Descripcion_Subramo&quot;                                                                                   
+## [11] &quot;Ejecutivo...11&quot;                                                                                        
+## [12] &quot;Directivo...12&quot;                                                                                        
+## [13] &quot;Ejecutivo...13&quot;                                                                                        
+## [14] &quot;Directivo...14&quot;                                                                                        
+## [15] &quot;RFC&quot;                                                                                                   
+## [16] &quot;IdAseg&quot;                                                                                                
+## [17] &quot;Razón_Social&quot;                                                                                          
+## [18] &quot;Fecha_de_Alta&quot;                                                                                         
+## [19] &quot;Fecha_de_Art._140&quot;                                                                                     
+## [20] &quot;Observaciones&quot;                                                                                         
+## [21] &quot;Tipo_Persona&quot;                                                                                          
+## [22] &quot;Clientes_2016_2017_2018&quot;                                                                               
+## [23] &quot;Moneda&quot;                                                                                                
+## [24] &quot;Póliza&quot;                                                                                                
+## [25] &quot;1_IDENTIFICACION_OFICIAL\&quot;&quot;                                                                            
+## [26] &quot;2_CLAVE_UNICA_DE_REGISTRO_DE_POBLACION_(CURP)...26&quot;                                                    
+## [27] &quot;3_CEDULA_DE_IDENTIFICACION_FISCAL_(RFC)...27&quot;                                                          
+## [28] &quot;4_COMPROBANTE_DE_DOMICILIO...28&quot;                                                                       
+## [29] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...29&quot;                                                                    
+## [30] &quot;1_TESTIMONIO_NOTARIAL_O_COPIA_DEL_ACTA_COSTITUTIVA&quot;                                                    
+## [31] &quot;2_CEDULA_DE_IDENTIFICACION_FISCAL_(RFC)&quot;                                                               
+## [32] &quot;3_COMPROBANTE_DE_DOMICILIO&quot;                                                                            
+## [33] &quot;4_TESTIMONIO_O_COPIA_DEL_PODER_NOTARIAL_DEL_REPRESENTANTE_LEGAL&quot;                                       
+## [34] &quot;5_IDENTIFICACION_OFICIAL_DEL_REPRESENTANTE_LEGAL&quot;                                                      
+## [35] &quot;6_ESCRITO_FIRMADO_QUE_ACREDITA_LA_INSCRIPCION_RESPECTIVA_(EMPRESA_DE_RECIENTE_CONSTITUCION)&quot;           
+## [36] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...36&quot;                                                                    
+## [37] &quot;99_DATOS_COMPLETOS...37&quot;                                                                               
+## [38] &quot;1_TESTIMONIO_O_COPIA_CERTIFICADA_DEL_PODER_NOTARIAL&quot;                                                   
+## [39] &quot;2_CONSTANCIA_DE_NOMBRAMIENTO,_EXPEDIDA_EN_TERMINOS_DEL_ART._90_DE_LA_LEY_DE_INST._DE_SEGUROS&quot;          
+## [40] &quot;3_IDENTIFICACION_OFICIAL_DEL_REPRESENTANTEO_REPRESENTANTES_LEGALES_DE_LA_ENTIDAD&quot;                      
+## [41] &quot;4_COMPROBANTE_DE_DOMICILIO...41&quot;                                                                       
+## [42] &quot;5_CEDULA_DE_IDENTIFICACION_FISCAL_(RFC)&quot;                                                               
+## [43] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...43&quot;                                                                    
+## [44] &quot;9_Y/O_ACTA_DE_MAYORIA_QUE_SE_LE_ENTREGA_AL_PRESIDENTE_MUNICIPAL_Y_LEY_ORGANICA_DE_LA_ADMINISTRACION_PU&quot;
+## [45] &quot;99_DATOS_COMPLETOS...45&quot;                                                                               
+## [46] &quot;1_IDENTIFICACION_OFICIAL&quot;                                                                              
+## [47] &quot;2_CLAVE_UNICA_DE_REGISTRO_DE_POBLACION_(CURP)...47&quot;                                                    
+## [48] &quot;3_CEDULA_DE_IDENTIFICACION_FISCAL_(RFC)...48&quot;                                                          
+## [49] &quot;4_COMPROBANTE_DE_DOMICILIO...49&quot;                                                                       
+## [50] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...50&quot;                                                                    
+## [51] &quot;99_DATOS_COMPLETOS...51&quot;                                                                               
+## [52] &quot;5_CARTA_PODER_DEL_APODERADO_LEGAL&quot;                                                                     
+## [53] &quot;6_IDENTIFICACION_DEL_APODERADO_LEGAL&quot;                                                                  
+## [54] &quot;7_COMPROBANTE_DE_DOMICILIO_DEL_APODERADO_LEGAL&quot;                                                        
+## [55] &quot;1_PASAPORTE_ORIGINAL_Y/O_DOCUMENTO_QUE_ACREDITE_SU_LEGAL_ESTANCIA_EN_TERRITORIO_MEXICANO...55&quot;         
+## [56] &quot;4_COMPROBANTE_DE_DOMICILIO...56&quot;                                                                       
+## [57] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...57&quot;                                                                    
+## [58] &quot;1_COPIA_LEGISLADA_O_APOSTILLADA_DEL_DOCTO._QUE_ACREDITE_SU_LEGAL_EXISTENCIA&quot;                           
+## [59] &quot;2_COPIA_LEGISLADA_O_APOSTILLADA_DEL_PODER_DEL_REPRESENTANTE_LEGAL_(NAL._O_EXT.)&quot;                       
+## [60] &quot;3_COPIA_DE_LA_IDENTIFICACION_PERSONAL_OFICIAL_DEL_REPRESENTANTE_O_REPRESENTANTES_LEGALES&quot;              
+## [61] &quot;4_COMPROBANTE_DE_DOMICILIO...61&quot;                                                                       
+## [62] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...62&quot;                                                                    
+## [63] &quot;99_DATOS_COMPLETOS...63&quot;                                                                               
+## [64] &quot;1_PASAPORTE_ORIGINAL_Y/O_DOCUMENTO_QUE_ACREDITE_SU_LEGAL_ESTANCIA_EN_TERRITORIO_MEXICANO...64&quot;         
+## [65] &quot;4_COMPROBANTE_DE_DOMICILIO...65&quot;                                                                       
+## [66] &quot;8_FORMATO_CONOCE_A_TU_CLIENTE...66&quot;                                                                    
+## [67] &quot;99_DATOS_COMPLETOS...67&quot;</code></pre>
+<p> </p>
+<p><strong>…y la magia de <code>dplyr</code> es: un solo PIPE!!!!!</strong></p>
+<pre class="r"><code>emision %&gt;%
+  mutate(CUENTA_DOCS = rowSums(.[24:43]==&quot;Si&quot;, na.rm=TRUE)) %&gt;%
+  mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100) %&gt;%
+  select(c(&quot;Sucursal&quot;,&quot;Nombre_Sucursal&quot;,&quot;Prima_Convertida&quot;,&quot;PORCENTAJE_CUMPLI&quot;)) %&gt;%
+  filter(PORCENTAJE_CUMPLI&gt;0) %&gt;%
+  group_by(Sucursal ,Nombre_Sucursal) %&gt;%
+  summarise(Prima_Prom = sum(Prima_Convertida)/n(),
+            Cumplimiento_prom= sum(PORCENTAJE_CUMPLI)/n())</code></pre>
+<pre><code>## # A tibble: 1 x 4
+## # Groups:   Sucursal [1]
+##   Sucursal Nombre_Sucursal Prima_Prom Cumplimiento_prom
+##   &lt;chr&gt;    &lt;chr&gt;                &lt;dbl&gt;             &lt;dbl&gt;
+## 1 D00      MEXICO             266124.              10.6</code></pre>
+<p> </p>
+<p>Dejamos todas las sucursales, lo guardan en su variable y listo!!!</p>
+<pre class="r"><code>emision_resumen &lt;- emision %&gt;%
+mutate(CUENTA_DOCS = rowSums(.[24:43]==&quot;Si&quot;, na.rm=TRUE)) %&gt;%
+mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100) %&gt;%
+select(c(&quot;Sucursal&quot;,&quot;Nombre_Sucursal&quot;,&quot;Prima_Convertida&quot;,&quot;PORCENTAJE_CUMPLI&quot;)) %&gt;%
+filter(PORCENTAJE_CUMPLI&gt;=0) %&gt;%
+group_by(Sucursal ,Nombre_Sucursal) %&gt;%
+summarise(Adeudos = n(),
+          Prima_Prom = sum(Prima_Convertida)/n(),
+          Cumplimiento_prom= sum(PORCENTAJE_CUMPLI)/n()) %&gt;%
+na.omit() %&gt;%
+arrange(Adeudos)
+emision_resumen</code></pre>
+<pre><code>## # A tibble: 3 x 5
+## # Groups:   Sucursal [3]
+##   Sucursal Nombre_Sucursal   Adeudos Prima_Prom Cumplimiento_prom
+##   &lt;chr&gt;    &lt;chr&gt;               &lt;int&gt;      &lt;dbl&gt;             &lt;dbl&gt;
+## 1 F04      METRO ARCOS             1    281196.              0   
+## 2 D70      METRO INSURGENTES      10    196118.              0   
+## 3 D00      MEXICO                191    241681.              2.61</code></pre>
+<p> </p>
+<p>Aplausos!!!</p>
+<p> </p>
+<p>Para la siguiente sesión comentaremos esta lectura:</p>
+<p><a href="https://infogram.com/es/pagina/visualizacion-datos" class="uri">https://infogram.com/es/pagina/visualizacion-datos</a></p>
 </div>
 </div>
 

@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + R_Basico_1.0
 + R_Basico_1.1
 + R_Basico_1.2
++ R_dplyr
 
 &nbsp;
 
@@ -674,7 +675,7 @@ read_csv("C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/Workshop_Seguros/bases/P
 
 ```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
 library(readr)
-test <- read_csv("C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/data-transformation-workshop/bases/PRIMAS_EJE_AUTOS.csv", skip = 2)
+test <- read_csv("C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/data-transformation-workshop/bases/PRIMAS_EJE_CARGA.csv", skip = 2)
 ```
 &nbsp;
 
@@ -692,9 +693,11 @@ str(test)
   d) Por último, de la información que ahora esta en su variable, usando LOOP´S (for e ifelse) reemplacen los productos (ID_PROD) que sean IGUALES a 700 por el producto (ID_PROD) 750.
 
 ```{r eval=F, echo=F, error=FALSE, message=FALSE, warning=FALSE}
+#Aqui una solucion super mega CHARRA!
 for (i in test$ID_PROD){
-  i<-ifelse(i==700,750,i)
-}                  
+  test$ID_PROD<-ifelse(test$ID_PROD==700,750,test$ID_PROD)
+}
+unique(test$ID_PROD)
 ```
 &nbsp;
 
@@ -703,5 +706,222 @@ Revisen el siguiente video para comentarlo la proxima sesión.
 https://youtu.be/sTNfFatKfoI
 
 
+&nbsp;
+
+### R_dplyr
+
+`OBJETIVO:` **Pipes, datos en forma tidy y vervos de la librería**
+  
+  &nbsp;
+
+Sigan cuidadosamente las siguientes instrucciones, inicien RStudio y generen un nuevo proyecto:
+  
+* En Windows click en el botón de Inicio y busquen Rstudio.
+* Ya en Rstudio den click en  `File -> New Project... -> Existing Directory -> Browse... -> seleccionar carpeta destino -> Open -> Create Project` 
+* Ya que se abre otra pantalla de R, dar click en  `File -> New File -> R script` 
+* Guárdenlo en su carpeta del Proyecto nuevo que acabamos de crear.  `File -> Save As -> ruta a su carpeta y nombre del file`
+* Instalen `dplyr`(en caso de no tenerlo aún)
+* Iniciemos con lo siguiente:
+  
+&nbsp;
 
 
+Debemos cargar el archivo *ART_492_JUNIO_2019* con varias pestañas, contribucion de nuestro amigo LEE.
+
+De la siguiente forma cargamos 1 sola pestaña, pero no es la escencia de esto.
+```{r results="hide", error=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(readxl)
+pestaña <- read_excel("C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/ART_492_JUNIO_2019.xlsx", sheet = 2)
+head(pestaña)
+```
+&nbsp;
+
+Revisamos de la siguiente manera las pestañas y seleccionamos la que queremos revisar.
+```{r error=FALSE, message=FALSE, warning=FALSE}
+#recuerden que el path de cada equipo es diferente
+ruta <- "C:/Users/Administrador/Desktop/DOC/WORKSHOP_R/ART_492_JUNIO_2019.xlsx"
+excel_sheets(path = ruta)
+```
+Ojo. Muestra inclusive las pestañas que est ocultas.
+
+&nbsp;
+
+Cargamos el archivo y la pestaña deseada:
+```{r results="hide", error=FALSE, message=FALSE, warning=FALSE}
+emision <- read_excel(path = ruta, sheet = "SERGIO CARBALLO")
+head(emision)
+```
+&nbsp;
+
+Revisamos los datos:
+  
+```{r eval=F,error=FALSE, message=FALSE, warning=FALSE}
+summary(emision)
+```
+&nbsp;
+
+**Verbos de `dplyr` que usaremos:**
+  
+* mutate() adds new variables that are functions of existing variables
+* select() picks variables based on their names.
+* filter() picks cases based on their values.
+* summarise() reduces multiple values down to a single summary.
+* arrange() changes the ordering of the rows.
+
+Provided by https://dplyr.tidyverse.org/
+
+
+**Nota. Usaremos un simbolo muy curioso para todo esto, operator(%>%)** 
+  
+  
+&nbsp;
+
+Iniciamos con el verbo `mutate()`, el cual nos genera una nueva variable a partir de la suma de columnas seleccionadas que contienen cierta condición.
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_modificado <- emision %>%
+  mutate(CUENTA_DOCS = rowSums(.[24:43]=="Si", na.rm=TRUE))
+```
+&nbsp;
+
+Revisamos como quedo el nuevo dataset.
+```{r eval=F, error=FALSE, message=FALSE, warning=FALSE}
+head(emision_modificado)
+```
+
+&nbsp;
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_modificado <- emision_modificado %>%
+  mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100)
+#Revisamos la nueva variable
+summary(emision_modificado$PORCENTAJE_CUMPLI)
+```
+&nbsp;
+
+Ahora revisamos que hace el verbo `select()`.
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_res <- emision_modificado %>%
+  select(c("Sucursal","Nombre Sucursal","Prima Convertida"))
+```
+
+&nbsp;
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+colnames(emision_res)
+```
+
+&nbsp;
+
+No guardamos lo siguiente en la variable, solo observen que pasa.
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_modificado %>%
+  select(ends_with("ramo")) %>%
+  head()
+```
+&nbsp;
+
+Y el verbo `filter()` similar al que ya habiamos visto.
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_modificado <- emision_modificado %>%
+  filter(`Descripcion Ramo`  == "AUTOMOVILES", Subramo %in% c(1,2))
+```
+&nbsp;
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+head(emision_modificado)
+```
+&nbsp;
+
+El siguiente verbo `summarise()` es de gran utilidad, lo usaremos mucho, esperen a que lleguemos al mundo visual de `ggplot`.
+
+Tenemos la variable **emision_res** que tiene la extracción de solo 3 columnas, la usamos.
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_res <- emision_res %>%
+  group_by(Sucursal) %>%
+  summarise(cuenta = n())
+```
+
+&nbsp;
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_res
+```
+&nbsp;
+
+Y por ultimo un verbo para ordenar o acomodar nuestros valores muy usado es `arrange()`
+
+```{rerror=FALSE, message=FALSE, warning=FALSE}
+emision_res %>%
+  arrange(desc(cuenta))
+```
+
+&nbsp;
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_res <- emision_res %>%
+  arrange(cuenta)
+```
+
+&nbsp;
+
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision_res
+```
+&nbsp;
+
+Quiamos espacios feos de los nombres de columnas:
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+names(emision) <- gsub(" ", "_", names(emision))
+colnames(emision)
+```
+&nbsp;
+
+**...y la magia de `dplyr` es:          un solo PIPE!!!!!**
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+emision %>%
+  mutate(CUENTA_DOCS = rowSums(.[24:43]=="Si", na.rm=TRUE)) %>%
+  mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100) %>%
+  select(c("Sucursal","Nombre_Sucursal","Prima_Convertida","PORCENTAJE_CUMPLI")) %>%
+  filter(PORCENTAJE_CUMPLI>0) %>%
+  group_by(Sucursal ,Nombre_Sucursal) %>%
+  summarise(Prima_Prom = sum(Prima_Convertida)/n(),
+            Cumplimiento_prom= sum(PORCENTAJE_CUMPLI)/n())
+```
+
+&nbsp;
+
+Dejamos todas las sucursales, lo guardan en su variable y listo!!!
+  
+  ```{r}
+emision_resumen <- emision %>%
+  mutate(CUENTA_DOCS = rowSums(.[24:43]=="Si", na.rm=TRUE)) %>%
+  mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100) %>%
+  select(c("Sucursal","Nombre_Sucursal","Prima_Convertida","PORCENTAJE_CUMPLI")) %>%
+  filter(PORCENTAJE_CUMPLI>=0) %>%
+  group_by(Sucursal ,Nombre_Sucursal) %>%
+  summarise(Adeudos = n(),
+            Prima_Prom = sum(Prima_Convertida)/n(),
+            Cumplimiento_prom= sum(PORCENTAJE_CUMPLI)/n()) %>%
+  na.omit() %>%
+  arrange(Adeudos)
+emision_resumen
+```
+
+&nbsp;
+
+Aplausos!!!
+
+&nbsp;
+
+
+
+Para la siguiente sesión comentaremos esta lectura:
+
+https://infogram.com/es/pagina/visualizacion-datos
