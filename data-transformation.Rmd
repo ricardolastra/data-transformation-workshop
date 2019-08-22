@@ -899,7 +899,7 @@ emision %>%
 
 Dejamos todas las sucursales, lo guardan en su variable y listo!!!
   
-  ```{r}
+  ```{r error=FALSE, message=FALSE, warning=FALSE}
 emision_resumen <- emision %>%
   mutate(CUENTA_DOCS = rowSums(.[24:43]=="Si", na.rm=TRUE)) %>%
   mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100) %>%
@@ -925,3 +925,339 @@ Aplausos!!!
 Para la siguiente sesión comentaremos esta lectura:
 
 https://infogram.com/es/pagina/visualizacion-datos
+
+
+### R_ggplot
+
+`OBJETIVO:` **Graficar entendiendo los datos, escalas y tipos de gráficos, mejorar visualizaciones actuales**
+
+&nbsp;
+
+Empezamos usando unos nuevos datos fake con propositos didacticos.
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+emision <- read.csv("./bases/Consolidados-7.csv", header = T, stringsAsFactors=F)
+```
+
+&nbsp;
+
+...exploramos un poco...
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+str(emision)
+```
+&nbsp;
+
+Un regalo!
+```{r error=FALSE, message=FALSE, warning=FALSE}
+#Quitamos las comas y redondeamos la cifra, ademas que guardamos la variable como entero
+library(readr)
+emision <- emision %>%
+  mutate(Emitida = parse_number(Emitida),
+         Pagada = parse_number(Pagada))
+#parse_number esta dentro de readr
+```
+&nbsp;
+
+revisamos de nuevo:
+
+```{r error=FALSE, message=FALSE, warning=FALSE}
+str(emision)
+```
+
+&nbsp;
+
+Ahora si pudieron cargar `tidyverse` solo habiliten la libreria.
+
+```{r}
+library(ggplot2)
+```
+
+Si *NO* pudieron cargar `tidyverse`, descarguen `ggplot2` y habiliten la libreria.
+
+```{r, eval=FALSE}
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+&nbsp;
+
+Ventajas de `ggplot2`:
+
+ + Muy flexible
+ + Fácil de interpretar, sintaxis sencilla
+ + Sistema ya muy avanzado para graficar
+ + Ecosistema amplio
+ + Comunidad amplia, gran soporte
+ + Basado en el libro "The Grammar of Graphics"
+
+&nbsp;
+
+¿Cómo se usa?
+
+Empezamos con la función ggplot(), integrando nuestra base y sus variables (con aes()). Luego agregamos las coordenadas o puntos a graficar con geom_point() o con  geom_histogram(), luego las escalas ó colores (como puede ser scale_colour_brewer()), algunas especificaciones como  facet_wrap() y hasta títulos o marcas.
+
+&nbsp;
+
+¿Y si graficamos con R base?  `ggplot2` VS R base de una manera muy sencilla.
+
+```{r , warning=F, error=F, message=F}
+hist(emision$Emitida)
+```
+
+Y con `ggplot2` se ve lo mismo de la siguiente forma:
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision, aes(x = Emitida)) +
+  geom_histogram()
+```
+
+Sin embargo hay que graficar cosas que hagan sentido, pero antes revisemos un poco mas.
+
+&nbsp;
+
+Aesthetic Mapping
+
+En el mundo de `ggplot2` *aesthetic* significa "algo que puedes ver". Puedes incluir las siguientes opciones:
+
+-   position (por ejemplo en el eje x o en el eje de las y´s)
+-   color (el color de relleno)
+-   fill (el color del grafico)
+-   shape (forma)
+-   linetype
+-   size (tamaño)
+
+Cada tipo de gráfico solo acepta un conjunto de datos, es natural de una gráfica de dos dimensiones.
+
+&nbsp;
+
+Objetos geométricos (`geom`)
+
+Son los tipos de gráficos que tenemos en cada imagen:
+
+-   Puntos (`geom_point`, para scatter plots, dot plots, etc.)
+-   Lineas (`geom_line`, para time series, trend lines, etc.)
+-   Diagrama de caja y brazo (`geom_boxplot`)
+
+Un gráfico al menos debe tener un objeto geométrico, y pueden ir agregando más con el símbolo `+`, que al ponerlo lo identa de manera correcta.
+
+Puedes tener una buena ayuda con los objetos disponibles de la siguiente forma:
+
+```{r, eval=FALSE}
+help.search("geom_", package = "ggplot2")
+```
+
+&nbsp;
+
+Pongamos datos reales...
+
+```{r , warning=F, error=F, message=F}
+#Quitamos la basura
+emision <- emision %>%
+  filter(Nombre.Director != "NO INFORMADO")
+```
+&nbsp;
+
+Ordenamos y hacemos un sencillo resumen
+
+```{r , warning=F, error=F, message=F}
+emision_anual <- emision %>%
+  group_by(Año.Contable) %>%
+  summarise(Prima_E = sum(Emitida))
+emision_anual
+```
+
+&nbsp;
+
+Y graficamos
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_anual, aes(y = Prima_E, x = Año.Contable)) +
+  geom_point()
+```
+
+Agregamos leyendas en ambos ejes
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_anual, aes(y = Prima_E, x = Año.Contable)) +
+  geom_point() +
+  scale_x_continuous(limits = c(2015, 2020))+
+  ylab("Prima Emitida Acumulada")+
+  xlab("Año contable")
+```
+
+Un poco mejor
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_anual, aes(y = Prima_E, x = Año.Contable)) +
+  geom_point(size= 6, alpha= .6) +
+  scale_x_continuous(limits = c(2015.5, 2019.5))+
+  ylab("Prima Emitida Acumulada")+
+  xlab("Año contable")
+```
+
+O mejor asi
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_anual, aes(y = Prima_E, x = Año.Contable)) +
+  geom_point(size= 6, alpha= .6) +
+  geom_line(color= "red") +
+  scale_x_continuous(limits = c(2015.5, 2019.5))+
+  ylab("Prima Emitida Acumulada")+
+  xlab("Año contable")
+```
+
+Sin embargo podemos hacer mejores visualizaciones con mejores datos...
+
+&nbsp;
+
+Volvemos a ordenar el set original
+
+```{r , warning=F, error=F, message=F}
+emision_director <- emision %>%
+  filter(Nombre.Director != "NO INFORMADO") %>%
+  group_by(Nombre.Director, Año.Contable) %>%
+  summarise(Prima_E = sum(Emitida),
+            Prima_P = sum(Pagada))
+emision_director
+```
+&nbsp;
+
+y ahora si toma sentido!!
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_director, aes(y = Prima_E, x = Año.Contable, colour = Nombre.Director)) +
+  geom_point(size= 6, alpha= .7) +
+  scale_x_continuous(limits = c(2015.5, 2019.5))+
+  ylab("Prima Emitida Acumulada")+
+  xlab("Año contable")
+```
+
+O mejor aun...se puede?
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_director, aes(x = Año.Contable, y = Nombre.Director)) +
+  geom_point(aes(size = Prima_E), alpha = 0.4) +
+  scale_size(range = c(0.5, 16))  #Ajusta el tamaño de los circulos
+```
+
+Podemos agregar algunas librerias que nos ayudan a mejorar las visualizaciones.
+
+
+```{r , warning=F, error=F, message=F}
+#install.packages("ggpubr")
+library(ggpubr)
+# Teniendo otros datos esta visualización es buenisima
+ggscatterhist(
+  emision_director, x = "Prima_E", y = "Prima_P",
+  color = "Nombre.Director", size = 5, alpha = 0.7,
+  margin.params = list(fill = "Nombre.Director", color = "black", size = 0.4)
+  )
+```
+
+
+O podemos hacer algunas ya un poco conocidas...
+
+```{r , warning=F, error=F, message=F}
+ggplot(emision_director, aes(x = Año.Contable, y = Prima_E)) +
+  geom_col(aes(color = Nombre.Director, fill = Nombre.Director), position = position_stack())
+```
+
+de mis favoritas
+
+```{r , warning=F, error=F, message=F}
+# Multiple line plot
+ggplot(emision_director, aes(x = Año.Contable, y = Prima_E)) + 
+  geom_line(aes(color = Nombre.Director), size = 1) +
+  theme_minimal()
+```
+&nbsp;
+
+Le subimos el volumen!!!
+
+```{r , warning=F, error=F, message=F}
+#Obtenemos los datos de CHEM@
+emi_chema <- emision %>%
+  filter(Nombre.Director == "CHEMA",
+         Año.Contable != "2019") %>%
+  group_by(Nombre.Director, Año.Contable) %>%
+  summarise(Prima_E = sum(Emitida),
+            Prima_P = sum(Pagada))
+#Una regresion lineal sencilla
+#Obtenemos los coeficientes
+regresion <- lm(Prima_E~Año.Contable, data = emi_chema)
+#Ajustamos
+emi_chema$prediccion <- predict(regresion)
+
+#De mejor interpretación
+p1 <- ggplot(emi_chema, aes(x = Año.Contable, y = Prima_E))
+
+p1 + geom_point() +
+  scale_x_continuous(limits = c(2016, 2018)) +
+  geom_line(aes(y = prediccion))
+```
+
+Agregamos unas bandas de confianza representadas por una sombra
+
+```{r , warning=F, error=F, message=F}
+p1 + geom_point() +
+  scale_x_continuous(limits = c(2016, 2018)) +
+  geom_line(aes(y = prediccion)) +
+  geom_smooth()
+```
+
+
+...pero y el año 2019 y el 2020 como va a cerrar? Ideas??
+
+&nbsp;
+
+Seguimos con la magia!
+
+```{r , warning=F, error=F, message=F}
+conf1 <- predict(regresion,interval="confidence")
+pred1 <- predict(regresion,interval="prediction")
+```
+
+Pasamos los siguientes dos años...
+
+```{r , warning=F, error=F, message=F}
+new <- data.frame(Año.Contable=seq(2019,2020,length=2))
+conf2 <- predict(regresion,interval="confidence",newdata=new)
+pred2 <- predict(regresion,interval="prediction",newdata=new)
+new$prediccion <- predict(regresion,newdata=new)
+new
+```
+
+y lo graficamos para que se entienda mejor
+
+```{r , warning=F, error=F, message=F}
+emi_chema_pred <-bind_rows(emi_chema,new)
+p2 <- ggplot(emi_chema_pred, aes(x = Año.Contable, y = Prima_E))
+p2 + geom_point(size= 2) +
+  scale_x_continuous(limits = c(2016, 2020)) +
+  geom_line(aes(y = prediccion)) +
+  geom_point(aes(y = prediccion),color= "blue", size= 3, alpha = 0.4) 
+```
+
+revisamos el detalle que nos da "lm", las bandas de confianza y de predicción
+
+```{r , warning=F, error=F, message=F}
+par(las=1,bty="l") ## formato
+plot(Prima_E~Año.Contable,data=emi_chema,ylim=c(120000000,2650000000),xlim=c(2016,2020)) ## datos originales
+abline(regresion) ## ajuste del modelo
+matlines(emi_chema$Año.Contable,conf1[,c("lwr","upr")],col=2,lty=1,type="b",pch="+")
+matlines(emi_chema$Año.Contable,pred1[,c("lwr","upr")],col=2,lty=2,type="b",pch=1)
+matlines(new$Año.Contable,conf2[,c("lwr","upr")],col=4,lty=1,type="b",pch="+")
+matlines(new$Año.Contable,pred2[,c("lwr","upr")],col=4,lty=2,type="b",pch=1)
+```
+
+&nbsp;
+
+Mas ideas, revisen el siguiente link:
+
+https://www.datanovia.com/en/blog/ggplot-examples-best-reference/
+
+Buenisimos tutoriales, muchas gracias a los amigos de datanovia!!!
+
+Ademas pueden revisar el documento de apoyo data-visualization-2.1.pdf que esta en el repo del Workshop.
