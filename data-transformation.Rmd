@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + R_Basico_1.1
 + R_Basico_1.2
 + R_dplyr
++ R_Rmd
 
 &nbsp;
 
@@ -899,7 +900,7 @@ emision %>%
 
 Dejamos todas las sucursales, lo guardan en su variable y listo!!!
   
-  ```{r error=FALSE, message=FALSE, warning=FALSE}
+```{r error=FALSE, message=FALSE, warning=FALSE}
 emision_resumen <- emision %>%
   mutate(CUENTA_DOCS = rowSums(.[24:43]=="Si", na.rm=TRUE)) %>%
   mutate(PORCENTAJE_CUMPLI = (CUENTA_DOCS/43)*100) %>%
@@ -1261,3 +1262,294 @@ https://www.datanovia.com/en/blog/ggplot-examples-best-reference/
 Buenisimos tutoriales, muchas gracias a los amigos de datanovia!!!
 
 Ademas pueden revisar el documento de apoyo data-visualization-2.1.pdf que esta en el repo del Workshop.
+
+&nbsp;
+
+### R_Rmd
+
+`OBJETIVO:` **Crear, guardar, ejecutar codigo para generar un reporte**
+
+&nbsp;
+
+Antes de empezar con RMD´s revisaremos un par de temas importantes:
+
+####  1. tidyr
+  
+Es tema muy importante para la manipulación y manejo de datos son formatos denominados *tidy*, es una abstracción de datos limpios, antes del concepto ya existian datos almacenados de esta forma, pero `R` nos brinda una serie de verbos ó funciones para convertirlos como queremos de una manera simple y sencilla.
+
+Mas info revisen el siguiente artículo:
+
++ [Artículo Tidy Hadley Wickham](http://vita.had.co.nz/papers/tidy-data.pdf)
+
+Asi los queremos:
+
+![Tidy Data](http://r4ds.had.co.nz/images/tidy-1.png)
+
+Se acomoda cada *variable* en una *columna*
+
+Cada *observación* en un *renglón*
+
+Y cada *valor* en una *celda* ó *casilla*.
+
+  + Fuente: [Presentaciones de Hadley Wickham](http://vita.had.co.nz/papers/tidy-data-pres.pdf)
+  
+&nbsp;
+
+*¿Cómo podemos encontrar la información almacenada en el mundo de los datos?*
+
+Aquí algunos ejemplos:
+
+Table: Observación con datos implícitos
+
+||Lat|Long|Indicador|
+|:----:|:------:|:-------:|:--------:|
+|Obs1| \# | \# | \# | 
+
+
+Table: Con fecha implícita
+
+| | lugar | indicador |
+|:---:|:-----:|:-----:|
+|Obs 1 |  | |
+|Obs 2 | |  |
+
+
+Table: Otro con Fecha implícita 
+
+| |Fecha 1 | Fecha 2 |
+|:---:|:-----:|:------:|
+|lugar 1|    |   |
+|lugar 2|  | |
+
+Table: Uno más!!!
+
+|  |  Fecha 1 | Fecha 2 | ... |
+|:-----:|:-------:|:-------:|:------:|
+| **LUGAR 1** |   |    |   |  |
+| Ind 1 |   #  | #   | ... |
+| Ind 2 |   #  |  #   | ... |
+| **LUGAR 2** |   |    |   |  |
+| Ind 1 |   #  | #   | ... |
+| Ind 2 |   #  |  #   | ... |
+
+Tablas que también existen en otro tipo de formatos: 
+
+||Indicador 1|Indicador 2|
+|:--:|:--:|:---:|
+
+||Fecha 1| Fecha 2| Fecha 1| Fecha 2|
+|:-----:|:--:|:-------:|:-----:|:-----:|
+|lugar 1| Ind 1| Ind 1 | Ind 2| Ind 2|
+|lugar 1| Ind 1| Ind 1 | Ind 2| Ind 2|
+
+Otros ejemplos: 
+
++ Nombres de las columnas representan valores de los datos en lugar de nombres de variables -el nombre de un lugar por ejemplo-
++ Una columna contiene varias variables en lugar de una variable 
++ Una tabla contiene más de una unidad de observación
++ Las variables están contenidas en los renglones y columnas, en lugar de sólo columnas.
++ Los datos de una unidad observacional están dispersas en varios *data sets*
+
+Usando `tidyr` se ve como sigue:
+
+```{r echo=TRUE, warning=FALSE, error=FALSE, message=FALSE}
+library(tidyr)
+desordenados <- data_frame(nombre=c("juan.perez.lopez","martha.lopez.benitez",
+                             "jesus.ramirez.perez","jose.martinez.lopez",
+                             "aurora.saldivar.salazar"),
+                    genero_edad=c("m.35","f.23","m.30","m.25","f.33"),
+                    time=c(1,3,4,5,6))
+
+desordenados
+```
+
+Tendríamos que dejarlo *tidy*:
+
++ Separando el nombre
+```{r echo=T, warning=F, error=F, message=F}
+medio.desordenados <- desordenados %>% separate(col=nombre, into=c("nombre",
+                                      "apellido_paterno",
+                                      "apellido_materno"), 
+                   sep="\\.")
+
+medio.desordenados
+```
+
++ Separando género y edad
+
+
+```{r echo=T, warning=F, error=F, message=F}
+limpios <- medio.desordenados %>% separate(col=genero_edad, into=c("genero","edad"), 
+                   sep="\\.")
+
+limpios
+```
+
+Otro ejemplo: ¿Qué está mal?
+
+```{r echo=T, warning=F, error=F, message=F}
+paises <- data_frame(pais=c(rep("Afganistan",4),
+                           rep("Brazil",4),
+                           rep("China",4)),
+                    year=c(rep(1999,2),rep(2000,2),
+                           rep(1999,2),rep(2000,2),
+                           rep(1999,2),rep(2000,2)),
+                    llave=c("casos","poblacion","casos","poblacion",
+                          "casos","poblacion","casos","poblacion",
+                          "casos","poblacion","casos","poblacion"),
+                    valor=c(75,1300000,134,1400000,
+                            10000,100000000,12000,120000000,
+                            56000,150000000,60000,170000000))
+
+paises
+```
+
+Lo deberíamos arreglar con: 
+
+```{r echo=TRUE, error=FALSE, message=FALSE, warning=FALSE}
+limpio <- paises %>% spread(key=llave, value=valor, fill=NA)
+
+limpio
+```
+
+El último
+
+```{r echo=TRUE, error=FALSE, message=FALSE, warning=FALSE}
+stocks <- data_frame(
+  time = as.Date('2009-01-01') + 0:9,
+  X = rnorm(10, 0, 1),
+  Y = rnorm(10, 0, 2),
+  Z = rnorm(10, 0, 4)
+)
+
+stocks
+
+stocks %>% gather(stock, price, -time)
+```
+
+
+&nbsp;
+
+
+#### 2. Mutating Joins
+
+Otro tema super util e importante son los **joins**, son una especie de validaciones de datos que cumplen las condiciones que nosotros indicamos para unir dos tablas o parte de ellas, los conocemos en excel como el famoso _buscarv_ (horrenda comparación, pero es necesaria para efectos didacticos), los joins son mucho mas poderosos y se resume en lo siguiente:
+
+&nbsp;
+
+```{r echo=F, fig.cap="Mutating Joins", out.width = '60%'}
+knitr::include_graphics("Imagenes/joins.jpg")
+```
+
+&nbsp;
+
+Revisemos un excelente articulo, veamos la sintaxis, lo pueden replicar después para entender mejor.
+
+
+https://rpubs.com/williamsurles/293454
+
+
+&nbsp;
+
+> RMD/R Markdown
+
+La creación de documentos con Markdown R comienza con un archivo de extensión .Rmd, el cual contiene una combinación de markdown (contenido con formato de texto simple) y trozos de código R. El archivo .Rmd se alimenta a `knitr`, que ejecuta todos los trozos de código R y crea un nuevo documento de reducción (.md) que incluye el código R y su salida.
+
+Ventajas respecto a otras herramientas de reportes:
+
+  1. Tiene gran diversidad de formatos de salida, como html, pdf, bookdown, latex-pdf, slide, dashboard, folletos, entre otros.
+  2. Reproducible
+  3. Se puede ejecutar en tiempo real
+  4. Excelente framework para ciencia de datos
+  5. Se generan reportes de alta calidad que pueden ser compartidos en grandes audiencias
+
+&nbsp;
+
+Iniciamos...
+
+&nbsp;
+
+Sigan cuidadosamente las siguientes instrucciones, inicien RStudio y generen un nuevo proyecto:
+  
+* En Windows click en el botón de Inicio y busquen Rstudio.
+* Ya en Rstudio den click en  `File -> New Project... -> Existing Directory -> Browse... -> seleccionar carpeta destino -> Open -> Create Project` 
+* En la **consola** instalen y habiliten lo siguiente:
+```{r, eval=FALSE}
+install.packages("rmarkdown")
+library(rmarkdown)
+```
+* Despúes dar click en  `File -> New File -> R markdown`
+* Poner  en "title" el titulo del **ejericio_1** y en "author" su **nobre**. 
+* Guárdenlo en su carpeta del Proyecto nuevo que acabamos de crear.  `File -> Save As -> ruta a su carpeta y nombre del file`.
+* Den click en el boton de Knit y veamos lo que pasa...
+
+
+La forma de generar los documentos es la siguiente, veamos como es su estructura.
+
+&nbsp;
+
+Iniciamos configurando el encabezado:
+
+~~~
+---
+title: "Escribe tu titulo"
+author: "Escribe tu nombre"
+date: "Escribe la fecha"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+~~~
+
+&nbsp;
+
+Despúes ponemos un poco de texto en nuestro documento.
+
+El texto normal se escribe igual que en cualquier otro documento, por ejemplo un documento word. Hay que tener cuidado si queremos escribir negritas, cursivas o algún carácter especial. Por ejemplo:
+
+~~~
++ Negrita: Escribir el texto como **Negrita** o __Negrita__
+
++ Cursiva: Escribir el texto como *Cursiva* o _Cursiva_
+~~~
+
+* Podemos poner encabezados por sección:
+
+~~~
+# Título 1
+## Título 2
+### Título 3
+~~~
+
+&nbsp;
+
+Luego insertamos el codigo de R en los famosos _chunks_ de la siguiente forma:
+
+~~~
+```{r}
+#Codigo
+```
+~~~
+
+y por ultimo para obtener el documento final, simplemente damos click en el botón Knit y seleccionar Knit to HTML,PDF o WORD para producir un documento en el formato deseado.
+
+&nbsp;
+
+Quieren saber mas, revisen las notas en el sitio oficial:
+
+https://rmarkdown.rstudio.com/lesson-1.html
+
+(Lo hacen en un rato libre, vale la pena!!!)
+
+&nbsp;
+
+> Ejercicio 2
+
+
+Todo lo anterior en un RMD con tus datos!
+
+- Lo envian por mail hasta el Lunes 2 de Septiembre a las 11:59:00 p.m.
+
+&nbsp;
+
