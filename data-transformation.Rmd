@@ -1546,6 +1546,15 @@ https://rmarkdown.rstudio.com/lesson-1.html
 
 > Ejercicio 2
 
+1. Generen un reporte con los datos del archivo ART_492, lean la base y seleccionen la información de su dirección (recuerden que esta por pestañas-sheets).
+
+2. Con `dplyr` hagan un resumen y desplieguenlo en el reporte.
+
+3. Hagan una gráfica de puntos o scatter plot con algo de información.
+
+4. Hagan una visualización como ustedes piensen que la base puede transmitir a cada ejecutivo su volumen de adeudos y lo que representa en $.
+
+Den formato al reporte, usen titulos y describan brevemente cada sección de su reporte.
 
 Todo lo anterior en un RMD con tus datos!
 
