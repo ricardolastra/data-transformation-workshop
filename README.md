@@ -15,7 +15,7 @@ Workshop de R, 8 sesiones de aprendizaje desde cero de R para no programadores c
 
 ## Ejercicios
 
-## Artículos
+*Los mejores ejercicios que el grupo realizarón están [aquí.](ejercicios/)
 
 
 > Science is to understand your way...
