@@ -20,6 +20,8 @@ knitr::opts_chunk$set(echo = TRUE)
 + R_Basico_1.2
 + R_dplyr
 + R_Rmd
++ Bonus
++ Extra Bonus
 
 &nbsp;
 
@@ -1561,4 +1563,527 @@ Todo lo anterior en un RMD con tus datos!
 - Lo envian por mail hasta el Lunes 2 de Septiembre a las 11:59:00 p.m.
 
 &nbsp;
+
+### Bonus
+
+`OBJETIVO:` **Mostrarles que aún hay mas cosas en el universo de `R` y generar mas ideas para sus proyectos.**
+
+&nbsp;
+
+####  A. Strings
+
+Los *strings* son cualquier valor que se encuentre entre comillas ó comillas sencillas. A estos valores `R` los trata como *strings*, se almacenan entre comillas aunque en la UI solo se vean comillas sencillas.
+
+
+```{r , warning=F, error=F, message=F}   
+a <- 'Empieza y termina con comilla sencilla'
+a
+
+b <- "Empieza y termina con comillas"
+b
+
+c <- "Comilla sencilla ' en medio de comillas"
+c
+
+d <- 'Comillas " en medio de comilla sencilla al inicio y al final'
+d
+```
+
+Ejemplo de *strings* invalidos:
+
+```{r , eval=F} 
+e <- 'Comillas mezcladas" 
+Resultado:
+INCOMPLETE_STRING
+```
+```{r , eval=F} 
+f <- 'Una comilla sencilla ' dentro de otras comillas sencillas'
+Resultado:
+INCOMPLETE_STRING
+```
+```{r , eval=F} 
+g <- "Comillas " dentro de comillas dobles"
+Resultado:
+INCOMPLETE_STRING
+```
+
+Para concatenar strings usamos algo muy sencillo `paste`
+
+```{r } 
+a <- "D00"
+b <- '1234'
+c <- "2019 1"
+
+print(paste(a,b,c))
+
+print(paste(a,b,c, sep = "-"))
+
+print(paste(a,b,c, sep = "", collapse = ""))
+```
+Para formatear los strings también usamos algo sencillo:
+
+```{r } 
+# Justificar a la Izquierda
+cadena <- format("Cuota", width = 6, justify = "l")
+cadena
+
+# Justificar al centro
+cadena <- format("Cuota", width = 9, justify = "c")
+cadena
+```
+Podemos contar los caracteres de una oración con `nchar()`
+
+```{r } 
+cadena2 <- nchar("Prima Emitida en $ usd...")
+cadena2
+```
+Podemos cambiar a mayúsculas o minúsculas.
+```{r } 
+toupper(cadena)
+```
+```{r } 
+tolower(cadena)
+```
+Por ultimo podemos hacer substrings más cortos de uno ya existente
+
+```{r }
+# Extraer caracteres de la 5ta a la  7th posición
+cadena3 <- substring("Ricardo Lastra", 5, 7)
+cadena3
+```
+
+Adicional a R base pueden revisar la libreria `stringr` cuya sintaxis es muy amigable, esta dentro del universo Tidy que ya conocemos. 
+
+Pueden consultar el siguiente link https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html
+
+&nbsp;
+
+**REGEX**
+
+Relacionado al tema, tambien revisen un buen tutorial de REGEX ó expresiones regulares, será de gran ayuda!!!
+
+https://tutorialzine.com/2014/12/learn-regular-expressions-in-20-minutes
+
+
+Herramienta para probar y depurar expresiones regulares.
+
+https://regex101.com/
+
+&nbsp;
+  
+####  B. Fechas
+  
+  Son de las cosas que más dolores de cabeza les dan a algunos, sin embargo hay librerías que lo hacen sencillo, las fechas son difíciles de manejar por los formatos en los que cada sistema las almacena, este no depende de los sistemas, sino de la necesidad del usuario, de la zona horaria, y en algunos casos son solo días, meses o horas con minutos y segundos los que se necesitan.  
+  
+  Una magnifica libreria es `lubridate` la cual soporta instantes, intervalos, duraciones y periodos.
+  
+```{r , warning=F, error=F, message=F}  
+fecha <- Sys.Date()
+fechas <- seq(fecha, length.out=12, by = "1 month")
+fechas
+```
+
+más ejemplos...
+
+Accedemos al formato `dd/mm/aaaa` con la funcion **dmy** y obtenemos el mes de la fecha de nacimiento:
+
+```{r , warning=F, error=F, message=F}
+library(lubridate)
+bday <- dmy("29/05/1986")
+month(bday)
+```
+
+Accedemos al día de la semana de ese año:
+
+```{r , warning=F, error=F, message=F}
+wday(bday, label = TRUE)
+```
+
+Y accedemos también al dia del año actual:
+
+```{r , warning=F, error=F, message=F}
+year(bday) <- 2019
+wday(bday, label = TRUE)
+```
+&nbsp;
+
+Y en formato `aaaa/mm/dd hr:min:seg` con la funcion **ymd_hms** y obtenemos el mes de la fecha de esta forma:
+
+```{r , warning=F, error=F, message=F}
+time <- ymd_hms("2019-06-25 15:30:30")
+time
+```
+Funciones de ayuda para manipular time zones: with_tz(), force_tz()
+
+```{r , warning=F, error=F, message=F}
+# Changes printing
+with_tz(time, "America/Chicago")
+```
+
+```{r , warning=F, error=F, message=F}
+# Changes time
+force_tz(time, "America/Chicago")
+```
+
+&nbsp;
+
+
+####  C. Factores
+  
+  Cuando uno quiere analizar datos, regularmente necesita variables que funcionan como etiquetas. Estas etiquetas pueden ser contadas, pero no sumadas. A este tipo de variables se les conoce como variables categóricas y en R se llaman factores.
+
+```{r , warning=F, error=F, message=F}  
+mascotas <- c("P", "G", "P", "P", "G", "P")
+mascotas <- factor(mascotas)
+mascotas
+```
+
+```{r , warning=F, error=F, message=F}  
+mascotas <- factor(c("P", "G", "P", "P", "G", "P","G"), levels=c("G", "P"), labels=c("GATO", "PERRO"))
+mascotas
+```  
+
+&nbsp;
+
+####  D. Paleta de colores
+  
+  En el mundo visual, para tunnear nuestros graficos, la libreria "RColorBrewer" es una herramienta basica, contiene
+
+```{r , warning=F, error=F, message=F}
+#install.packages("RcolorBrewer")
+library(RColorBrewer)
+#create a sequential palette for usage and show colors
+mypalette<-brewer.pal(7,"Greens")
+image(1:7,1,as.matrix(1:7),col=mypalette,xlab="Tonos de Verde",
+       ylab="",xaxt="n",yaxt="n",bty="n")
+```  
+```{r , warning=F, error=F, message=F}
+## display a qualitative palette
+display.brewer.pal(7,"Accent")
+``` 
+
+Mas información en: https://www.rdocumentation.org/packages/RColorBrewer/versions/1.1-2/topics/RColorBrewer
+
+####  E. Listas
+  
+Algo muy util en programación orientada a objetos son las listas, son parecidas a los vectores, pero con una diferencia importante: pueden tener los elementos de diferentes tipos.
+
+```{r , warning=F, error=F, message=F}
+lista <- list(1, 2, 3, 4, 5)
+lista
+```
+&nbsp;
+
+El operador de extracción ([), devuelve una lista
+
+
+```{r , warning=F, error=F, message=F}
+lista[1]
+```
+
+```{r , warning=F, error=F, message=F}
+is.list(lista[1])
+```
+
+```{r , warning=F, error=F, message=F}
+is.vector(lista[1])
+```
+&nbsp;
+
+El operador [[ devuelve un vector
+
+```{r , warning=F, error=F, message=F}
+lista[[1]]
+```
+
+```{r , warning=F, error=F, message=F}
+is.list(lista[[1]])
+```
+
+```{r , warning=F, error=F, message=F}
+is.vector(lista[[1]])
+```
+
+&nbsp;
+
+Asi es como se ven los diferentes datos de 
+
+```{r , warning=F, error=F, message=F}
+renta <- list(direccion="Masarik 306", m2=c(10, 15, 3), dlls.men=2500)
+renta
+```
+&nbsp;
+
+Existe otro operador de acceso: $ (lo vimos en sesiones pasadas también)
+
+
+```{r , warning=F, error=F, message=F}
+renta$dlls.men
+```
+
+
+```{r , warning=F, error=F, message=F}
+renta[3]
+```
+
+
+```{r , warning=F, error=F, message=F}
+renta[[2]]
+```
+
+&nbsp;
+  
+####  F. Mapas interactivos.
+
+Para crear visualizaciones muy buenas a través de mapas, existe `leaflet`, la cual es una librería creada por los amigos de *Rstudio* para integrarla a la distribución del mismo nombre creada en JavaScript.
+
+Es súper interesante este tema, ya que podemos generar mapas interactivos, integrarlos en una APP, publicarlos en línea o hasta ponerlos en nuestro reporte RMD.
+
+Esencialmente el paquete te permite generar mapas con configuraciones personales de map tiles, markers, polygons, lines, popups, y objetos geojson. Casi todo lo que conocemos de Google Fusion Tables o Carto(DB) en esta parte de mapas, ustedes lo pueden hacer usando R y el paquete de `leaflet`.
+
+Aquí un buen ejemplo!!!
+
+
+```{r warning=F, error=F, message=F}
+#install.packages("leaflet")
+library(leaflet)
+# Initialize and assign m as the leaflet object
+m <- leaflet() %>%
+# Now add tiles to it
+    addTiles() %>%  
+# Setting the middle of where the map should be and the zoom level
+    setView(lng=-77.030137, lat=38.902986, zoom = 16) %>%
+# Now, add a marker with a popup, 
+    addMarkers(lng=-77.030137, lat=38.902986, popup="<b>Hola Workshop</b><br><a href='https://www.washingtonpost.com'>-Link_a_sitio_relacionado_con_ubicación</a>")
+
+m 
+```
+
+
+&nbsp;
+  
+####  F. Intermedios-Avanzados R
+    
+    i) Shiny
+    ii) Simulación
+    iii) Scrapping
+    iv) Algoritmos de ML
+    v) Algoritmos de Texto
+    vi) Creando un paquete
+    vii) Paralelo
+    viii) API´s
+    
+&nbsp;
+
+####  G. Otras herramientas
+    
+    i) Git
+    ii) Spark & Keras
+    iii) SQLite, JS, C
+    iv) Docker
+    v) Bash programming, paralelo
+    vi) AWS (Amazon cloud services)
+    
+Muchas gracias!!!
+
+&nbsp;
+
+### Extra Bonus
+
+**Aquí lo prometido!!! Usenlo y diviertanse!!!!**
+
+&nbsp;
+
+Ejemplos de `joins`:
+
+```{r eval=F, warning=F, error=F, message=F}
+reporte_produccion <- left_join(produccion, agentes, by = "IDAGE")
+```
+En este ejemplo se tiene una base de producción al cierre en la variable `produccion` y en la variable `agentes` se tiene un catalogo de agentes (clave,razon social), se usa como indice para la union de las bases la variable `IDAGE` la cual esta contenida en ambas tablas y al hacer el left join se genera una columna nueva en la base original de producción.
+
+Este es el uso mas simple de un `join`, pero el mas similar a un clasico cruce con `buscarv` de excel.
+
+Otro ejemplo:
+
+```{r eval=F, warning=F, error=F, message=F}
+reporte_produccion <- left_join(produccion, meses, by = "FECONT")
+```
+En este ejemplo se tiene una base de producción al cierre en la variable `produccion` y en la variable `meses` se tiene un catalogo de meses (fechacon,mes_numerico,mes_letra), se usa como indice para la union de las bases la variable `FECONT` la cual esta contenida en ambas tablas y al hacer el left join se generan dos columnas nuevas en la base original de producción que contienen el mes numerico y el mes en texto.
+
+Un ejemplo mas:
+
+```{r eval=F, warning=F, error=F, message=F}
+#CRUZAMOS POR LLAVE "ID_TRABAJADOR", "ID_CREDITO" 
+VARIABLE_X <-DT5MIO %>% 
+  semi_join(DT17MIO, by = c("ID_TRABAJADOR", "ID_CREDITO"))
+```
+En ese ejmplo se juntan dos tablas por un indice doble o dos llaves usando `dplyr`.
+
+Por ultimo, y si la union se desea hacer con el nombre de los indices/llave diferentes?, si, también se puede!!!
+
+```{r eval=F, warning=F, error=F, message=F}
+#CRUCE POR ID_TRABAJADOR Y LA MISMA VARIABLE PERO CON OTRO NOMBRE
+m=merge(DT4, DT2, by.x= c("ID_TRABAJADOR"), by.y = c("ALGUN_TRABAJADOR"), allow.cartesian=TRUE)
+```
+Lo anterior nos indica que podemos unir dos bases por la llave nombrada de diferente manera, pero con datos que sabemos que pueden coincidir. El merge nos ayuda a unir ambas bases en una sola.
+
+&nbsp;
+
+Una función muy valiosa con un `trimws`:
+
+```{r eval=F, warning=F, error=F, message=F}
+produccion_sin_espacios <- data.frame(lapply(produccion, function(x) if(class(x)=="character") trimws(x) else(x)), stringsAsFactors=F)
+```
+La función evalua con `lapply` y el `if` los casos donde las entradas (columnas/variables) de una base completa sean tipo `char` y ejecuta un recorte de espacios, o los elimina mejor dicho con `trimws` y se guarda todo en una variable identica pero sin espacios al inicio o al final de las observaciones.
+
+&nbsp;
+
+Forma para generar un archivo `csv` a partir de una variable:
+
+```{r eval=F, warning=F, error=F, message=F}
+write.csv(la_variable, "c:/ruta_de_tu_directorio_raiz/EMISION_ACTUAL.csv", row.names = F)
+```
+La opción de `row.names=F` evita que se generen numeros consecutivos en cada fila o row.
+
+&nbsp;
+
+Para juntar 2 o mas tablas en una sola usando `rbind.data.frame`:
+
+```{r eval=F, warning=F, error=F, message=F}
+#Combinar bases o tablas
+nueva_basesota <- rbind.data.frame(base1,base2,base3,base4, stringsAsFactors = FALSE, use.names=TRUE, fill=TRUE)
+```
+La forma de combinar dos tablas o más en una sola es con `rbind.data.frame` que nos permite juntar una tabla encima de la otra apartir de tablas con el mismo numero de columnas y mismo nombre de las mismas en 1 sola tabla, los encabezados no se repiten y solo permanece un encabezado para las 2  o más secciones que se junten. Tambien existe de forma similar un `cbind.data.frame` que junta de forma similar columnas, aunque no es muy util ya que deseamos muchas veces hacer esto a través de Joins.
+
+
+&nbsp;
+
+Una super función que remplaza los espacios y los puntos por guiones bajos:
+
+```{r eval=F, warning=F, error=F, message=F}
+clean_names<-function(x){
+  #x<-str_replace_all(x,'.','_') 
+  x<-str_replace_all(x,' ','_') 
+}
+```
+La función anterior remplaza de un `df` determinado una serie de caracteres indicados por otros diferentes.
+
+
+&nbsp;
+
+Super función para obtener un `GEDA` (graphic exploratory data analysis) automático:
+
+```{r eval=F, warning=F, error=F, message=F}
+#funcion que pide d.-dataframe, k.-numero de columnas que es el target i.e. clase
+geda<-function(d,k){
+  
+  for(i in 1:ncol(d)){
+    
+  if(i!=k){
+    
+  if((class(pull(d[,i])))=="character"){
+    print(i)
+    
+    p<-select(d,aux=noquote(colnames(d[i])),target=noquote(colnames(d[k])))%>%
+      ggplot(aes(y=..count../sum(..count..),x=aux,fill=target))+geom_bar()+
+      ggtitle(paste0('target=',noquote(colnames(d[k]))))+ylab('percentage')+xlab(noquote(colnames(d[i])))+
+      theme(plot.title = element_text(hjust = 0.5))
+  }
+  else{
+    p<-select(d,aux=noquote(colnames(d[i])),target=noquote(colnames(d[k])))%>%
+      ggplot(aes(y=aux,x=target))+geom_boxplot()+ggtitle(noquote(colnames(d[i])))+
+      ylab(noquote(colnames(d[i])))+xlab(noquote(colnames(d[k])))+
+      theme(plot.title = element_text(hjust = 0.5))
+    
+  }
+    print(p)
+  }
+    
+  }
+  
+}
+```
+
+La función anterior es un ejemplo de un `for` loop y un `if` anidados que evaluan valores de una tabla haciendo las graficas correspondientes.
+
+
+&nbsp;
+
+Un MEGA ejemplo de como usar `dplyr` y sus verbos, `kable` y sus multiples opciones y `ggplot` en una super grafica:
+
+```{r eval=F, warning=F, error=F, message=F}
+datos6 <- datos6 %>%
+  mutate(Porcentaje.Crecimiento.Prima=((Primas.Netas.Emitidas/lag(Primas.Netas.Emitidas,1))-1)*100)%>% filter(Año.Contable>2012) %>%
+  mutate(Año.Contable=as.character(Año.Contable)) %>%
+  mutate("Crecimiento.Prima (%)" = sprintf("%0.2f", Porcentaje.Crecimiento.Prima))%>%
+  select(-Porcentaje.Crecimiento.Prima) %>%
+  mutate("Siniestralidad (%)" = sprintf("%0.2f", Siniestralidad))%>%
+  select(-Siniestralidad)
+
+kable(datos6,  format.args = list(decimal.mark = '.', big.mark = ","), linesep = "", align = "c", booktabs = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive"), full_width = F, position = "left") %>% 
+  add_footnote(c("Fuente: Departamento de Contabilidad."))
+  
+ggplot(data=datos6,
+             aes(x=Año.Contable, y=Primas.Netas.Emitidas,group=1, text=paste0("Siniestralidad(%)=",Siniestralidad, "\n")))+
+geom_line(colour="blue")+ geom_point(size = 2, colour="red") + 
+scale_y_continuous(limits = c(1, 200000),label=comma,expand=c(0,0))+ 
+scale_x_continuous(breaks = seq(from = 2013, to = 2018, by = 1),limits = c(2013, 2018))+
+ylab("Prima Emitida")+
+xlab("Año")+
+theme(plot.margin = unit(c(1,.5,.5,1), "cm"))
+```
+En el ejemplo anterior hacemos con `dplyr` un breve resumen, mismo que visualizamos con `kable` en una tabla muy visual y posteriormente lo graficamos con `ggplot` en una super visualización con mucho detalle, la base original es de emisión histórica.
+
+
+&nbsp;
+
+El siguiente ejemplo es similar a los resumenes que relizamos en sesiones atras usando `dplyr`:
+
+```{r eval=F, warning=F, error=F, message=F}
+#Tabla de Primas por direccion 
+tabla5 <-  tabla4 %>%
+  mutate(Año.Contable=as.character(Año.Contable)) %>%
+  mutate(Emitida=as.numeric(Emitida)) %>%
+  group_by(Año.Contable,Nombre.Director) %>%
+  summarise(Emitida = sum(Emitida,na.rm=T)) %>%
+  mutate(Ratio = (round((Emitida/sum(Emitida))*100,2))) #Generamos Ratio de % de primas por cada direccion
+```
+Nos brinda un resumen de las primas emitidas por director por año contable.
+
+&nbsp;
+
+Ejemplos de una grafica muy nice con  `ggplotly`:
+
+```{r warning=F, error=F, message=F}
+  ######################## GRAFICA NICE ##################
+#install.packages("plotly")
+library(plotly)
+
+p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point() + geom_smooth()
+
+p <- p %>%
+  ggplotly(layerData = 2, originalData = F) %>%
+  add_fun(function(p) {
+    p %>% slice(which.max(se)) %>%
+      add_segments(x = ~x, xend = ~x, y = ~ymin, yend = ~ymax) %>%
+      add_annotations("Maximum uncertainty", ax = 60)
+  }) %>%
+  add_fun(function(p) {
+    p %>% slice(which.min(se)) %>%
+      add_segments(x = ~x, xend = ~x, y = ~ymin, yend = ~ymax) %>%
+      add_annotations("Minimum uncertainty")
+  })
+
+p
+``` 
+La funcion de `ggplotly` que proviene de la libreria de `plotly` nos ayuda a generar visualizaciones mas interactivas, es decir que podemos crear un ambiente entre la UI, el teclado y mouse o cualquier otro controlador directo a nuestro reporte.
+
+Mas información en:
+
+https://plot.ly/ggplot2/extending-ggplotly/
+
+Muchas gracias!
+
 
